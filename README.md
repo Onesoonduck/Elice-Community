@@ -2,6 +2,9 @@ elice project
 
 elicelab reservation community
 
+==========================================
+1일차
+
 1차 프로젝트 기획
 
 주제 : CRUD 게시판 개발
@@ -78,3 +81,12 @@ Develop Branch (Reviewer) : 개인 (매일)
 1. 검색조건 (작성자, 댓글 내용)
 2. 키워드 검색 후 검색버튼
 
+==========================================
+2일차
+
+![eilce_project_ERD](/uploads/6eb791b176c0c7e7ae957a8d567f47d0/eilce_project_ERD.png)
+
+1. 게시판의 테이블 추가하기
+2. 게시글의 테이블 추가하기
+3. 댓글의 테이블 추가하기
+4. 각 테이블들의 연결
