@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>엘리스랩 예약 커뮤니티</title>
+</head>
+<style>
+        .layout {
+            width: 60%;
+            margin: 0 auto;
+            margin-top: 40px;
+        }
+
+        .layout > div {
+            text-align: center;
+        }
+
+        .layout tr {
+            width: 100%;
+            white-space: nowrap;
+            margin: 0 auto;
+        }
+
+        .th1 {
+            width: 100px;
+            background-color: #ffe5ec;
+            text-align: center;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 0 auto;
+        }
+
+        .th2 {
+            width: 800px;
+            background-color: #ffe5ec;
+            text-align: center;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 0 auto;
+        }
+
+        .th3 {
+            background-color: #ffe5ec;
+            text-align: center;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 0 auto;
+            width: 100px;
+        }
+
+        .th4 {
+            background-color: #ffe5ec;
+            text-align: center;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 0 auto;
+            width: 100px;
+        }
+
+        .th5 {
+            background-color: #ffe5ec;
+            text-align: center;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 0 auto;
+            width: 100px;
+        }
+
+        .tbody td {
+            text-align: center;
+        }
+
+        .create-button {
+            text-align: center;
+            margin-top: 20px;
+            float: right;
+        }
+
+        .create-button a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+</style>
+
+<body>
+
+    <div class="layout">
+        <div>
+            <h1>엘리스랩 예약 커뮤니티</h1>
+        </div>
+        <table>
+            <thread>
+                <tr>
+                    <th class="th1">목차</th>
+                    <th class="th2">제목</th>
+                    <th class="th3">작성자</th>
+                    <th class="th4">생성일</th>
+                    <th class="th5">조회수</th>
+                </tr>
+            </thread>
+            <tbody class="tbody">
+                <tr th:each="post : ${list}">
+                    <td th:text="${post.id}">1</td>
+                    <td>
+                        <a th:text="${post.title}" th:href="@{/post/view(id=${post.id})}">제목입니다</a>
+                    </td>
+                    <td>홍길동</td>
+                    <td>2024-02-20</td>
+                    <td>17:19</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="create-button">
+            <a href="/post/write">게시물 생성</a>
+        </div>
+
+    </div>
+
+</body>
+</html>
