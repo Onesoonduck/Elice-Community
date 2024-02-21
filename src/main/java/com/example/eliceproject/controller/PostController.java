@@ -25,7 +25,7 @@ public class PostController {
     }
 
     // 게시글 작성
-    @GetMapping("/post/write")
+    @PostMapping("/post/write")
     public String postWriteForm() {
         return "postwrite";
     }
@@ -63,7 +63,7 @@ public class PostController {
     }
 
     // 게시글 수정하는 화면
-    @GetMapping("post/modify/{id}")
+    @PostMapping("post/modify/{id}")
     public String postModify(@PathVariable("id") Integer id, Model model) {
 
         model.addAttribute("post", postService.postView(id));
@@ -71,7 +71,7 @@ public class PostController {
     }
 
     // 게시글 수정된 화면
-    @PostMapping("/post/update/{id}")
+    @GetMapping("/post/update/{id}")
     public String postUpdate(@PathVariable("id") Integer id, Post post, Model model) {
 
         Post postTemp = postService.postView(id);
