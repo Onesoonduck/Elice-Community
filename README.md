@@ -84,6 +84,8 @@ Develop Branch (Reviewer) : 개인 (매일)
 ==========================================
 2일차
 
+API 계획
+![API_계획](/uploads/887ec428f546f60be6667b5ee3cb3af5/API_계획.png)
 
 #### 페르소나 설정
 1. 홍길동(25) : 엘리스랩 오프라인으로 예약을 할 건데 어떻게 해야 하는지도 모르고 어떤 준비를 해야 하는지도 모르겠다.
@@ -93,7 +95,3 @@ Develop Branch (Reviewer) : 개인 (매일)
 
 ![eilce_project_ERD](/uploads/6eb791b176c0c7e7ae957a8d567f47d0/eilce_project_ERD.png)
 
-1. 게시판의 테이블 추가하기
-2. 게시글의 테이블 추가하기
-3. 댓글의 테이블 추가하기
-4. 각 테이블들의 연결
