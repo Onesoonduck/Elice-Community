@@ -6,15 +6,14 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-//import java.time.LocalDateTime;
-
+@SuppressWarnings("JpaAttributeTypeInspection")
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Post {
+public class Board {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,13 +25,16 @@ public class Post {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "name", nullable = true)
-    private String name;
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime created_at;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Board board;
+    @Column(name = "writer", nullable = false)
+    private String writer;
+
+    @Column(name = "viewcount", nullable = false)
+    private int viewcount;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "post_id")
-    private List<Comment> comments;
+    @JoinColumn(name = "board_id")
+    private List<Post> posts;
 }

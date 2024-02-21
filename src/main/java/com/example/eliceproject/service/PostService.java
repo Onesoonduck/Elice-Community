@@ -19,12 +19,12 @@ public class PostService {
     }
 
     // 게시판 리스트 처리
-    public List<Post> boardList() {
+    public List<Post> postList() {
         return postRepository.findAll();
     }
 
     // 특정 게시글 불러오기
-    public Post boardView(Integer id) {
+    public Post postView(Integer id) {
         return postRepository.findById(id).get();
     }
 
@@ -32,4 +32,6 @@ public class PostService {
     public void postDelete (Integer id) {
         postRepository.deleteById(id);
     }
+
+
 }
