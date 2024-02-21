@@ -1,6 +1,6 @@
-elice project
+https://statuesque-smash-e48.notion.site/1-e854c37aa42e45d38b0f9cbc70a1c191?pvs=4
 
-elicelab reservation community
+엘리스 1차 프로젝트 CRUD 게시판 만들기
 
 ==========================================
 1일차
