@@ -10,7 +10,6 @@ import java.util.List;
 
 @Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
@@ -26,10 +25,21 @@ public class Post {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "name", nullable = true)
-    private String name;
+    @Column(name = "writer", nullable = true)
+    private String writer;
+
+    @Column(name = "viewcount", nullable = false, columnDefinition = "INT DEFAULT 0")
+    private int viewcount;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime created_at;
+
+    public Post() {
+        this.created_at = LocalDateTime.now();
+    }
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id")
     private Board board;
 
     @OneToMany(cascade = CascadeType.ALL)

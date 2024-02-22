@@ -25,7 +25,7 @@ public class PostService {
 
     // 특정 게시글 불러오기
     public Post postView(Integer id) {
-        return postRepository.findById(id).get();
+        return postRepository.findById(id).orElseThrow(() -> new RuntimeException("POST_NOT_FOUND"));
     }
 
     // 특정 게시글 삭제

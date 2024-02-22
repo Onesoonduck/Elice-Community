@@ -5,10 +5,7 @@ import com.example.eliceproject.entity.Post;
 import com.example.eliceproject.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 
 @Controller
@@ -25,7 +22,7 @@ public class PostController {
     }
 
     // 게시글 작성
-    @PostMapping("/post/write")
+    @GetMapping("/post/write")
     public String postWriteForm() {
         return "postwrite";
     }
@@ -39,11 +36,11 @@ public class PostController {
         model.addAttribute("message", "작성이 완료되었습니다.");
         model.addAttribute("searchUrl", "/post");
 
-        return "redirect:/post";
+        return "message";
     }
 
     // 선택한 게시물 보기
-    @GetMapping("/post/view")
+    @GetMapping("/post/view/{id}")
     public String postView(@PathVariable("id") Integer id, Model model) {
 
         model.addAttribute("post", postService.postView(id));
@@ -51,7 +48,7 @@ public class PostController {
     }
 
     // 게시글 삭제
-    @DeleteMapping("/post/delete")
+    @GetMapping("/post/delete/{id}")
     public String postDelete(@PathVariable("id") Integer id, Model model) {
 
         postService.postDelete(id);
@@ -59,11 +56,11 @@ public class PostController {
         model.addAttribute("message", "삭제되었습니다.");
         model.addAttribute("searchUrl", "/post");
 
-        return "redirect:/post";
+        return "message";
     }
 
     // 게시글 수정하는 화면
-    @PostMapping("post/modify/{id}")
+    @GetMapping("post/modify/{id}")
     public String postModify(@PathVariable("id") Integer id, Model model) {
 
         model.addAttribute("post", postService.postView(id));
@@ -71,7 +68,7 @@ public class PostController {
     }
 
     // 게시글 수정된 화면
-    @GetMapping("/post/update/{id}")
+    @PostMapping("/post/update/{id}")
     public String postUpdate(@PathVariable("id") Integer id, Post post, Model model) {
 
         Post postTemp = postService.postView(id);
@@ -83,6 +80,6 @@ public class PostController {
         model.addAttribute("message", "수정이 완료되었습니다.");
         model.addAttribute("searchUrl", "/post");
 
-        return "redirect:/post";
+        return "message";
     }
 }

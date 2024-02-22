@@ -15,7 +15,7 @@ public class BoardController {
     // 게시판
     @GetMapping("/board")
     public String boardList(Model model) {
-        model.addAttribute("list", boardService.boardList());
+        model.addAttribute("list", boardService.findBoards());
         return "boardlist";
     }
 }

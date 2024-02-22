@@ -8,7 +8,7 @@
 
 <h1 th:text="${post.title}">제목입니다.</h1>
 <p th:text="${post.content}">내용이 들어갈 부분입니다.</p>
-<a th:href="@{/post/delete(id=${post.id})}">삭제</a>
+<a th:href="@{/post/delete/{id}(id=${post.id})}">삭제</a>
 <a th:href="@{/post/modify/{id}(id=${post.id})}">수정</a>
 
 </body>

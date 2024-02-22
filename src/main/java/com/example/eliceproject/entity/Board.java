@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder(toBuilder = true)
 public class Board {
 
     @Id
@@ -25,16 +26,17 @@ public class Board {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime created_at;
-
     @Column(name = "writer", nullable = false)
     private String writer;
 
-    @Column(name = "viewcount", nullable = false)
-    private int viewcount;
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime created_at;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "board_id")
+    @JoinColumn(name = "post_id")
     private List<Post> posts;
+
+//    public static BoardBuilder builder() {
+//        return new BoardBuilder();
+//    }
 }

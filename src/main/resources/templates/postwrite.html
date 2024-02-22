@@ -51,6 +51,11 @@
         cursor: pointer;
     }
 
+    .writer {
+        width: 40px;
+        margin-bottom: 15px;
+    }
+
 </style>
 
 <body>
@@ -80,6 +85,13 @@
                         name="content"
                         placeholder="내용 입력"
                 ></textarea>
+            <div>
+                <h3 class="h3-1">작성자</h3>
+            </div>
+            <input type="text"
+                    class="writer"
+                    name="writer"
+                    required/>
                 <button type="submit" class="writeButton">작성</button>
         </form>
     </div>
