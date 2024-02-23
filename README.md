@@ -89,7 +89,7 @@ Develop Branch (Reviewer) : 개인 (매일)
 
 
 API 계획
-![API_계획](/uploads/887ec428f546f60be6667b5ee3cb3af5/API_계획.png)
+![API](/uploads/c881fdfa1b9246a5236c06754c0c5e29/API.png)
 
 
 ![eilce_project_ERD](/uploads/6eb791b176c0c7e7ae957a8d567f47d0/eilce_project_ERD.png)
