@@ -7,14 +7,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-//import java.time.LocalDateTime;
-
+@SuppressWarnings("JpaAttributeTypeInspection")
 @Entity
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Post {
+@Builder(toBuilder = true)
+public class Board {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,23 +27,14 @@ public class Post {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "writer", nullable = true)
+    @Column(name = "writer", nullable = false)
     private String writer;
-
-    @Column(name = "viewcount", nullable = false, columnDefinition = "INT DEFAULT 0")
-    private int viewcount;
 
     @Column(name = "created_at", nullable = false)
     private LocalDate created_at;
 
-    public Post() {
-        this.created_at = LocalDate.now();
-    }
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "board_id")
+    private List<Post> posts;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
-    private Board board;
-
-    @OneToMany(mappedBy = "post_id", cascade = CascadeType.ALL)
-    private List<Comment> comments;
 }
