@@ -2,10 +2,10 @@ package com.example.eliceproject.service;
 
 import com.example.eliceproject.entity.Post;
 import com.example.eliceproject.repository.PostRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class PostService {
@@ -19,8 +19,14 @@ public class PostService {
     }
 
     // 게시판 리스트 처리
-    public List<Post> postList() {
-        return postRepository.findAll();
+    public Page<Post> postList(Pageable pageable) {
+
+        return postRepository.findAll(pageable);
+    }
+
+    public Page<Post> postSearchList(String searchKeyword, Pageable pageable) {
+
+        return postRepository.findByTitleContaining(searchKeyword, pageable);
     }
 
     // 특정 게시글 불러오기
@@ -32,6 +38,5 @@ public class PostService {
     public void postDelete (Integer id) {
         postRepository.deleteById(id);
     }
-
 
 }

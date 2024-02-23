@@ -9,15 +9,20 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class BoardRepository {
+public class BoardRepository{
 
     private final JdbcTemplate jdbcTemplate;
+    private LocalDate created_at;
 
     public BoardRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -29,7 +34,7 @@ public class BoardRepository {
                     .title(resultSet.getString("title"))
                     .content(resultSet.getString("content"))
                     .writer(resultSet.getString("writer"))
-                    .created_at(resultSet.getTimestamp("created_at").toLocalDateTime())
+                    .created_at(resultSet.getDate("created_at").toLocalDate())
                     .build();
         };
     }
@@ -53,30 +58,40 @@ public class BoardRepository {
 
     public Board create(Board board) {
         String insertSql = "INSERT INTO board (title, content, writer, created_at) VALUES (?, ?, ?, ?)";
-        KeyHolder keyHolder = new GeneratedKeyHolder();
         LocalDateTime createdAt = LocalDateTime.now();
+        LocalDate createdAtDate = createdAt.toLocalDate();
 
         jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(insertSql, new String[]{"id"});
+            PreparedStatement ps = connection.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, board.getTitle());
             ps.setString(2, board.getContent());
             ps.setString(3, board.getWriter());
-            ps.setTimestamp(4, Timestamp.valueOf(createdAt));
+
+            ZonedDateTime zonedDateTime = createdAt.atZone(ZoneId.systemDefault());
+            Timestamp timestamp = Timestamp.from(zonedDateTime.toInstant());
+            ps.setTimestamp(4, timestamp);
+
             return ps;
-            }, keyHolder);
+        });
 
-            Number Key = keyHolder.getKey();
+        // 생성된 키 가져오기
+        Number key = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
 
-        if(Key == null) return board;
-            return board.toBuilder()
-                    .id(((Integer) Key).intValue())
-                    .created_at(createdAt)
-                    .build();
+        if (key != null) {
+            board.setId(key.intValue());
+            board.setCreated_at(createdAtDate);
+        }
+
+        return board;
     }
 
+
+
+
+
     public Board update(Board board) {
-        String updateSql = "UPDATE Board SET title = ?, content = ?, writer = ? WHERE id = ?";
-        jdbcTemplate.update(updateSql, board.getTitle(), board.getContent(), board.getWriter(), board.getId());
+        String updateSql = "UPDATE Board SET title = ?, content = ?, writer = ?, created_at = ? WHERE id = ?";
+        jdbcTemplate.update(updateSql, board.getTitle(), board.getContent(), board.getWriter(), board.getCreated_at());
 
         return board;
     }
@@ -85,4 +100,5 @@ public class BoardRepository {
         String sql = "DELETE FROM Board WHERE id = ?";
         jdbcTemplate.update(sql, board.getId());
     }
+
 }

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>게시글 작성폼</title>
+    <title>게시판 작성폼</title>
 </head>
 
 <style>
@@ -57,7 +57,6 @@
     input.writer {
         width: 100px;
         height: 20px;
-
     }
 
 </style>
@@ -65,13 +64,13 @@
 <body>
 
 <div class="header">
-    <h1>게시글 추가</h1>
+    <h1>게시판 추가</h1>
 </div>
 
 <div class="layout">
-    <form action="/post/writepro" method="post">
+    <form action="/board/writepro" method="Post">
         <div>
-            <h3 class="h3-1">게시글 제목</h3>
+            <h3 class="h3-1">게시판 제목</h3>
         </div>
         <input
                 type="text"
@@ -79,10 +78,10 @@
                 id="title"
                 name="title"
                 maxlength="30"
-                placeholder="게시글 제목 입력 (최대 30자)"
+                placeholder="게시판 제목 입력 (최대 30자)"
                 required
         />
-        <h3 class="h3-2">게시글 내용</h3>
+        <h3 class="h3-2">게시판 세부내용</h3>
         <textarea
                 class="form-control"
                 id="content"
@@ -99,6 +98,5 @@
         <button type="submit" class="writeButton">작성</button>
     </form>
 </div>
-
 </body>
 </html>

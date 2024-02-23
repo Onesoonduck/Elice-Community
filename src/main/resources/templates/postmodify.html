@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>게시판 작성폼</title>
+  <title>게시판 수정폼</title>
 </head>
 
 <style>
@@ -29,6 +29,7 @@
 
   .form-control {
     height: 30px;
+    margin-bottom: 10px;
   }
 
   .h3-1 {
@@ -49,6 +50,14 @@
     width: 71px;
     height: 30px;
     cursor: pointer;
+    position: fixed;
+    right: 15%;
+  }
+
+  input.writer {
+    width: 100px;
+    height: 20px;
+
   }
 
 </style>
@@ -56,13 +65,13 @@
 <body>
 
 <div class="header">
-  <h1>게시글 수정</h1>
+  <h1>게시판 수정</h1>
 </div>
 
 <div class="layout">
   <form th:action="@{/post/update/{id}(id=${post.id})}" method="post">
     <div>
-      <h3 class="h3-1">게시글 제목</h3>
+      <h3 class="h3-1">게시판 제목</h3>
     </div>
     <input
             type="text"
@@ -72,16 +81,21 @@
             maxlength="30"
             placeholder="게시글 제목 입력 (최대 30자)"
             required
-            th:value="${post.title}"
     />
-    <h3 class="h3-2">내용</h3>
+    <h3 class="h3-2">게시판 내용</h3>
     <textarea
             class="form-control"
             id="content"
             name="content"
             placeholder="내용 입력"
-            th:text="${post.content}"
     ></textarea>
+    <div>
+      <h3 class="h3-1">작성자</h3>
+    </div>
+    <input type="text"
+           class="writer"
+           name="writer"
+           required/>
     <button type="submit" class="writeButton">수정</button>
   </form>
 </div>

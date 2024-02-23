@@ -61,6 +61,7 @@
         .create-button {
             text-align: center;
             margin-top: 20px;
+            margin-right: 55px;
             float: right;
         }
 
@@ -71,6 +72,32 @@
             color: #fff;
             text-decoration: none;
             border-radius: 5px;
+        }
+
+        .paging {
+            text-align: center;
+            margin: 0 auto;
+            margin-top: 30px;
+        }
+
+        .search {
+            width: 300px;
+            margin-top: -30px;
+            margin-left: 55px;
+        }
+
+        .search input {
+            height: 20px;
+        }
+
+        .search button {
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            width: 50px;
+            height: 30px;
         }
 
 </style>
@@ -91,12 +118,27 @@
                         <li class="list1">
                             <a th:text="${post.title}" th:href="@{/post/view/{id}(id=${post.id})}">제목입니다</a>
                         </li>
-                        <li class="list2">홍길동</li>
-                        <li class="list3">2024-02-20</li>
+                        <li class="list2" >홍길동</li>
+                        <li class="list3" >2024-02-20</li>
                         <li class="list4">조회수 1</li>
                     </div>
                 </tr>
             </tbody>
+
+        <!-- 페이징처리 시작 -->
+        <div class="paging">
+        <th:block th:each="page:${#numbers.sequence(startPage, endPage)}">
+            <a th:if="${page != nowPage}" th:href="@{/post(page=${page - 1}, searchKeyword = ${param.searchKeyword})}" th:text="${page}"></a>
+            <strong th:if="${page == nowPage}" th:text="${page}" style="color:red"></strong>
+        </th:block>
+        </div>
+        <!-- 페이징처리 끝 -->
+
+        <form th:action="@{/post}" method="get" class="search">
+            <input type="text" name="searchKeyword">
+            <button type="submit">검색</button>
+        </form>
+
         <div class="create-button">
             <a href="/post/write">게시물 생성</a>
         </div>

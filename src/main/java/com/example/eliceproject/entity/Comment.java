@@ -26,4 +26,6 @@ public class Comment {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime created_at;
 
+    private int post_id;
+
 }

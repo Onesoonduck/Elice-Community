@@ -3,6 +3,7 @@ package com.example.eliceproject.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -32,17 +33,16 @@ public class Post {
     private int viewcount;
 
     @Column(name = "created_at", nullable = false)
-    private LocalDateTime created_at;
+    private LocalDate created_at;
 
     public Post() {
-        this.created_at = LocalDateTime.now();
+        this.created_at = LocalDate.now();
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_id")
+    @JoinColumn(name = "post_id")
     private Board board;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "post_id")
+    @OneToMany(mappedBy = "post_id", cascade = CascadeType.ALL)
     private List<Comment> comments;
 }
