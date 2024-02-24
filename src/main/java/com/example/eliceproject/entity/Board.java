@@ -31,8 +31,8 @@ public class Board {
     @Column(name = "writer", nullable = false)
     private String writer;
 
-    @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP")
-    private LocalDate created_at;
+    @Column(name = "createdAt", nullable = false, columnDefinition = "TIMESTAMP")
+    private LocalDate createdAt;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "board")
@@ -42,7 +42,7 @@ public class Board {
         this.title = title;
         this.content = content;
         this.writer = writer;
-        this.created_at = LocalDate.now();
+        this.createdAt = LocalDate.now();
     }
 
 }

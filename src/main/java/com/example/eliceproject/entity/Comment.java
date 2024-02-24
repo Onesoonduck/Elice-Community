@@ -24,18 +24,18 @@ public class Comment {
     @Column(name = "writer", nullable = false)
     private String writer;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDate created_at;
+    @Column(name = "createdAt", nullable = false)
+    private LocalDate createdAt;
 
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;
 
-    public Comment(Post post, String content, String writer, LocalDate created_at) {
+    public Comment(Post post, String content, String writer, LocalDate createdAt) {
         this.post = post;
         this.content = content;
         this.writer = writer;
-        this.created_at = LocalDate.now();
+        this.createdAt = LocalDate.now();
     }
 
 }

@@ -22,7 +22,7 @@ import java.util.Optional;
 public class BoardRepository{
 
     private final JdbcTemplate jdbcTemplate;
-    private LocalDate created_at;
+    private LocalDate createdAt;
 
     public BoardRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -34,7 +34,7 @@ public class BoardRepository{
                     .title(resultSet.getString("title"))
                     .content(resultSet.getString("content"))
                     .writer(resultSet.getString("writer"))
-                    .created_at(resultSet.getDate("created_at").toLocalDate())
+                    .createdAt(resultSet.getDate("createdAt").toLocalDate())
                     .build();
         };
     }
@@ -57,7 +57,7 @@ public class BoardRepository{
     }
 
     public Board create(Board board) {
-        String insertSql = "INSERT INTO board (title, content, writer, created_at) VALUES (?, ?, ?, ?)";
+        String insertSql = "INSERT INTO board (title, content, writer, createdAt) VALUES (?, ?, ?, ?)";
         LocalDateTime createdAt = LocalDateTime.now();
         LocalDate createdAtDate = createdAt.toLocalDate();
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -81,7 +81,7 @@ public class BoardRepository{
 
         if (key != null) {
             board.setId(key.intValue());
-            board.setCreated_at(createdAtDate);
+            board.setCreatedAt(createdAtDate);
         }
 
         return board;
