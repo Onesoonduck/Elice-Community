@@ -1,5 +1,6 @@
 package com.example.eliceproject.controller;
 
+import com.example.eliceproject.dto.BoardDTO;
 import com.example.eliceproject.entity.Board;
 import com.example.eliceproject.mapper.BoardMapper;
 import com.example.eliceproject.service.BoardService;
@@ -76,13 +77,9 @@ public class BoardController {
     }
 
     @PostMapping("/board/update/{id}")
-    public String postUpdate(@PathVariable("id") Integer id, Board board, Model model) {
+    public String postUpdate(@PathVariable("id") Integer id, @ModelAttribute BoardDTO boardDTO, Model model) {
 
-        Board boardTemp = boardService.boardview(id);
-        boardTemp.setTitle(board.getTitle());
-        boardTemp.setContent(board.getContent());
-
-        boardService.boardwrite(boardTemp);
+        Board board = boardMapper.BoardDTOToBoard(boardDTO).toBuilder().id(id).build();
 
         model.addAttribute("message", "수정이 완료되었습니다.");
         model.addAttribute("searchUrl", "/board");
