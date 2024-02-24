@@ -60,12 +60,14 @@ public class BoardRepository{
         String insertSql = "INSERT INTO board (title, content, writer, created_at) VALUES (?, ?, ?, ?)";
         LocalDateTime createdAt = LocalDateTime.now();
         LocalDate createdAtDate = createdAt.toLocalDate();
+        KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, board.getTitle());
             ps.setString(2, board.getContent());
             ps.setString(3, board.getWriter());
+
 
             ZonedDateTime zonedDateTime = createdAt.atZone(ZoneId.systemDefault());
             Timestamp timestamp = Timestamp.from(zonedDateTime.toInstant());
@@ -75,7 +77,7 @@ public class BoardRepository{
         });
 
         // 생성된 키 가져오기
-        Number key = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
+        Number key = keyHolder.getKey();
 
         if (key != null) {
             board.setId(key.intValue());
@@ -86,12 +88,9 @@ public class BoardRepository{
     }
 
 
-
-
-
     public Board update(Board board) {
-        String updateSql = "UPDATE Board SET title = ?, content = ?, writer = ?, created_at = ? WHERE id = ?";
-        jdbcTemplate.update(updateSql, board.getTitle(), board.getContent(), board.getWriter(), board.getCreated_at());
+        String updateSql = "UPDATE Board SET title = ?, content = ?, writer = ?, WHERE id = ?";
+        jdbcTemplate.update(updateSql, board.getTitle(), board.getContent(), board.getWriter(), board.getId());
 
         return board;
     }
