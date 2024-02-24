@@ -1,5 +1,7 @@
 package com.example.eliceproject.controller;
 
+import com.example.eliceproject.mapper.PostMapper;
+import com.example.eliceproject.service.BoardService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -17,6 +19,10 @@ public class PostController {
 
     @Autowired
     private PostService postService;
+    @Autowired
+    private BoardService boardService;
+    @Autowired
+    private PostMapper postMapper;
 
     // 게시글 게시판
     @GetMapping("/post")
