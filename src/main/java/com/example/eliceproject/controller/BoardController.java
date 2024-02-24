@@ -7,10 +7,7 @@ import com.example.eliceproject.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 
 @Controller
@@ -94,7 +91,7 @@ public class BoardController {
     }
 
     // 게시판 삭제
-    @GetMapping("/board/delete/{id}")
+    @DeleteMapping("/board/delete/{id}")
     public String boardDelete(@PathVariable("id") Integer id, Model model) {
 
         boardService.boarddelete(id);
