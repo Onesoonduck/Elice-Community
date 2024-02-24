@@ -39,10 +39,14 @@ public class Post {
         this.created_at = LocalDate.now();
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
+    @ManyToOne
+    @JoinColumn(name = "board_id")
     private Board board;
 
-    @OneToMany(mappedBy = "post_id", cascade = CascadeType.ALL)
-    private List<Comment> comments;
+    public void setBoard(Board board) {
+        this.board = board;
+        if (!this.board.getPosts().contains(this)) {
+            this.board.getPosts().add(this);
+        }
+    }
 }
