@@ -32,7 +32,7 @@ public class Post {
     @Column(name = "viewcount", nullable = false, columnDefinition = "INT DEFAULT 0")
     private int viewcount;
 
-    @Column(name = "createdAt", nullable = false)
+    @Column(name = "created_at", nullable = false)
     private LocalDate createdAt;
 
     public Post() {

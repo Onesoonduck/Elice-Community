@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class PostController {
@@ -81,11 +82,10 @@ public class PostController {
 
     // 게시글 삭제
     @DeleteMapping("/post/delete/{id}")
-    public String postDelete(@PathVariable("id") Integer id, Model model) {
+    public String postDelete(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
 
         postService.postDelete(id);
-
-        model.addAttribute("message", "삭제되었습니다.");
+        redirectAttributes.addFlashAttribute("message", "삭제되었습니다.");
 
         return "redirect:/post";
     }
