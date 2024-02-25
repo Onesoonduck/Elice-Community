@@ -16,7 +16,7 @@ public class BoardDTO {
     private String title;
     private String content;
     private String writer;
-    private LocalDate created_at;
+    private LocalDate createdAt;
     private List<Post> posts;
 
 }

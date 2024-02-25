@@ -56,9 +56,8 @@ public class BoardController {
         boardService.boardwrite(board);
 
         model.addAttribute("message", "작성이 완료되었습니다.");
-        model.addAttribute("searchUrl", "/board");
 
-        return "message";
+        return "redirect:/board";
     }
 
     // 선택한 게시판 보기
@@ -82,9 +81,8 @@ public class BoardController {
         Board board = boardMapper.BoardDTOToBoard(boardDTO).toBuilder().id(id).build();
 
         model.addAttribute("message", "수정이 완료되었습니다.");
-        model.addAttribute("searchUrl", "/board");
 
-        return "message";
+        return "redirect:/board";
     }
 
     // 게시판 삭제
@@ -94,9 +92,8 @@ public class BoardController {
         boardService.boarddelete(id);
 
         model.addAttribute("message", "삭제되었습니다.");
-        model.addAttribute("searchUrl", "/board");
 
-        return "message";
+        return "redirect:/board";
     }
 
 }
