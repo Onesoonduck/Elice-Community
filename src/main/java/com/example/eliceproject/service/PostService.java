@@ -10,8 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class PostService {
 
@@ -43,13 +41,6 @@ public class PostService {
         post.setId(id);
         Post foundPost = postRepository.findById(post.getId())
                 .orElseThrow(() -> new ServiceLogicException(ExceptionCode.POST_NOT_FOUND));
-
-        Optional.ofNullable(post.getTitle())
-                .ifPresent(title -> foundPost.setTitle(title));
-        Optional.ofNullable(post.getContent())
-                .ifPresent(content -> foundPost.setContent(content));
-        Optional.ofNullable(post.getWriter())
-                .ifPresent(writer -> foundPost.setWriter(writer));
 
         return postRepository.save(foundPost);
     }
