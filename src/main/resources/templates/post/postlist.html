@@ -106,7 +106,7 @@
 
     <div class="layout">
         <div class="back">
-            <a th:href="@{/board}">게시판으로 돌아가기</a>
+            <a th:href="@{/templates/board}">게시판으로 돌아가기</a>
         </div>
         <div class="title">
             <h1>엘리스랩 커뮤니티</h1>
@@ -128,13 +128,13 @@
         <!-- 페이징처리 시작 -->
         <div class="paging">
         <th:block th:each="page:${#numbers.sequence(startPage, endPage)}">
-            <a th:if="${page != nowPage}" th:href="@{/post(page=${page - 1}, searchKeyword = ${param.searchKeyword})}" th:text="${page}"></a>
+            <a th:if="${page != nowPage}" th:href="@{/templates/post(page=${page - 1}, searchKeyword = ${param.searchKeyword})}" th:text="${page}"></a>
             <strong th:if="${page == nowPage}" th:text="${page}" style="color:red"></strong>
         </th:block>
         </div>
         <!-- 페이징처리 끝 -->
 
-        <form th:action="@{/post}" method="get" class="search">
+        <form th:action="@{/templates/post}" method="get" class="search">
             <input type="text" name="searchKeyword">
             <button type="submit">검색</button>
         </form>
