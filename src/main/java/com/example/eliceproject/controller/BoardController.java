@@ -17,7 +17,6 @@ import java.util.List;
 
 
 @Controller
-@RequestMapping("/boards")
 public class BoardController {
 
     @Autowired
@@ -55,14 +54,14 @@ public class BoardController {
     public String boardWritePro(@ModelAttribute BoardDTO boardDTO, Model model) {
 
         Board board = boardMapper.BoardDTOToBoard(boardDTO);
-        boardService.boardwrite(board);
+        boardService.boardWrite(board);
         model.addAttribute("message", "작성이 완료되었습니다.");
 
         return "redirect:/board";
     }
 
     // 게시판 키워드 검색
-    @GetMapping("/{boardId}")
+    @GetMapping("/board/{id}")
     public String getBoard(@PathVariable("id") Integer id,
                            @RequestParam(defaultValue = "0") int page,
                            @RequestParam(defaultValue = "10") int size,
@@ -79,10 +78,10 @@ public class BoardController {
     }
 
     // 게시판 수정
-    @GetMapping("board/modify/{id}")
+    @GetMapping("/board/modify/{id}")
     public String boardModify(@PathVariable("id") Integer id, Model model) {
 
-        model.addAttribute("board", boardService.boardview(id));
+        model.addAttribute("board", boardService.boardView(id));
         return "boardmodify";
     }
 
@@ -90,7 +89,7 @@ public class BoardController {
     public String postUpdate(@PathVariable("id") Integer id, @ModelAttribute BoardDTO boardDTO, Model model) {
 
         Board board = boardMapper.BoardDTOToBoard(boardDTO).toBuilder().id(id).build();
-        boardService.boardupdate(board);
+        boardService.boardUpdate(board);
         model.addAttribute("message", "수정이 완료되었습니다.");
 
         return "redirect:/board";
@@ -100,7 +99,7 @@ public class BoardController {
     @DeleteMapping("/board/delete/{id}")
     public String boardDelete(@PathVariable("id") Integer id, Model model) {
 
-        boardService.boarddelete(id);
+        boardService.boardDelete(id);
         model.addAttribute("message", "삭제되었습니다.");
 
         return "redirect:/board";

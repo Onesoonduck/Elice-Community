@@ -1,13 +1,16 @@
 package com.example.eliceproject.repository;
 
 import com.example.eliceproject.entity.Board;
+import com.example.eliceproject.entity.Post;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.awt.print.Pageable;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Timestamp;
@@ -78,7 +81,6 @@ public class BoardRepository{
 
         return board;
     }
-
 
     public Board update(Board board) {
         String updateSql = "UPDATE Board SET title = ?, content = ?, writer = ? WHERE id = ?";
