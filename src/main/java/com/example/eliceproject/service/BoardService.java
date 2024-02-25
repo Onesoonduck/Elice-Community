@@ -34,6 +34,10 @@ public class BoardService {
     }
 
     // 게시판 검색
+    public Board findBoardById(Integer id) {
+        return boardRepository.findById(id)
+                .orElseThrow(() -> new ServiceLogicException(ExceptionCode.BOARD_NOT_FOUND));
+    }
 
     // 게시물 생성
     public Board boardwrite(Board board) {

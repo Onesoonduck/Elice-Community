@@ -4,8 +4,6 @@ import com.example.eliceproject.dto.PostDTO;
 import com.example.eliceproject.mapper.PostMapper;
 import com.example.eliceproject.service.BoardService;
 import com.example.eliceproject.service.CommentService;
-import com.example.eliceproject.mapper.PostMapper;
-import com.example.eliceproject.service.BoardService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
