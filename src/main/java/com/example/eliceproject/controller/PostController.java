@@ -67,7 +67,6 @@ public class PostController {
 
 
         model.addAttribute("message", "작성이 완료되었습니다.");
-        model.addAttribute("searchUrl", "/post");
 
         return "redirect:/post/" + createdPost.getBoard().getId();
     }
