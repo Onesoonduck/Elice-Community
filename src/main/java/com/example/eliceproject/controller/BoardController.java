@@ -90,6 +90,7 @@ public class BoardController {
     public String postUpdate(@PathVariable("id") Integer id, @ModelAttribute BoardDTO boardDTO, Model model) {
 
         Board board = boardMapper.BoardDTOToBoard(boardDTO).toBuilder().id(id).build();
+        boardService.boardupdate(board);
         model.addAttribute("message", "수정이 완료되었습니다.");
 
         return "redirect:/board";

@@ -44,14 +44,7 @@ public class BoardService {
 
     // 게시물 수정
     public Board boardupdate(Board board) {
-        Board foundBoard = boardRepository.findById(board.getId())
-                .orElseThrow(() -> new ServiceLogicException(ExceptionCode.BOARD_NOT_FOUND));
-
-        foundBoard.setTitle(board.getTitle());
-        foundBoard.setContent(board.getContent());
-        foundBoard.setWriter(board.getWriter());
-
-        return boardRepository.update(foundBoard);
+        return boardRepository.update(board);
     }
 
     // 게시물 삭제
