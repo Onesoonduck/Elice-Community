@@ -100,16 +100,15 @@ public class PostController {
 
     // 게시글 수정된 화면
     @PostMapping("/post/update/{id}")
-    public String postUpdate(@PathVariable("id") Integer id, Post post, Model model) {
-
+    public String postUpdate(Post post, @PathVariable("id") Integer id, Model model) {
         Post postTemp = postService.postView(id);
         postTemp.setTitle(post.getTitle());
         postTemp.setContent(post.getContent());
 
-        postService.postwrite(postTemp);
+        postService.postwrite(postTemp, id);
 
         model.addAttribute("message", "수정이 완료되었습니다.");
-
         return "redirect:/post";
     }
+
 }

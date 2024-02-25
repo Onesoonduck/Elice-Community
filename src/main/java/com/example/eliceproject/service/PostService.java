@@ -24,9 +24,7 @@ public class PostService {
     public Post postwrite(Post post, Integer id) {
         Board boardToCreate = boardService.findBoardById(id);
         post.setBoard(boardToCreate);
-        Post savedPost = postRepository.save(post);
-
-        return savedPost;
+        return postRepository.save(post);
     }
 
     // 게시판 리스트 처리
