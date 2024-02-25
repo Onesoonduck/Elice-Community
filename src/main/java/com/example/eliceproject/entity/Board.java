@@ -38,7 +38,7 @@ public class Board {
     @JoinColumn(name = "board")
     final private List<Post> posts = new ArrayList<>();
 
-    public Board (String name, String description) {
+    public Board (String title, String content, String writer, LocalDate createdAt) {
         this.title = title;
         this.content = content;
         this.writer = writer;

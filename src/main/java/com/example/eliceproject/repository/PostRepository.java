@@ -15,7 +15,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 
     Page<Post>findByTitleContaining(String searchKeyword, Pageable pageable);
 
-    Page<Post> findAllByBoardOrderByCreatedAtDesc(Board board, Pageable pageable);
+    Page<Post> findAllByBoardOrderByCreatedAtDesc(Post post, Pageable pageable);
 
     Page<Post> findAllByBoardAndTitleContaining(Board board, String keyword, Pageable pageable);
 }
