@@ -6,6 +6,7 @@ import com.example.eliceproject.exception.ExceptionCode;
 import com.example.eliceproject.exception.ServiceLogicException;
 import com.example.eliceproject.repository.PostRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,6 +49,15 @@ public class PostService {
     // 특정 게시글 불러오기
     public Post postView(Integer id) {
         return postRepository.findById(id).orElseThrow(() -> new RuntimeException("POST_NOT_FOUND"));
+    }
+
+    // 게시판 키워드 검색
+    public Page<Post> findPostsByBoardAndKeyword(Board board, String keyword, PageRequest pageRequest) {
+        if (keyword != null && !keyword.isEmpty()) {
+            return postRepository.findAllByBoardAndTitleContaining(board, keyword, pageRequest);
+        } else {
+            return postRepository.findAllByBoardOrderByCreatedAtDesc(board, pageRequest);
+        }
     }
 
     // 특정 게시글 삭제
