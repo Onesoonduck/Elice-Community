@@ -12,7 +12,6 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -22,7 +21,6 @@ import java.util.Optional;
 public class BoardRepository{
 
     private final JdbcTemplate jdbcTemplate;
-    private LocalDate createdAt;
 
     public BoardRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -58,8 +56,7 @@ public class BoardRepository{
 
     public Board create(Board board) {
         String insertSql = "INSERT INTO board (title, content, writer, createdAt) VALUES (?, ?, ?, ?)";
-        LocalDateTime createdAt = LocalDateTime.now();
-        LocalDate createdAtDate = createdAt.toLocalDate();
+        LocalDate createdAt = LocalDate.now();
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
@@ -67,11 +64,6 @@ public class BoardRepository{
             ps.setString(1, board.getTitle());
             ps.setString(2, board.getContent());
             ps.setString(3, board.getWriter());
-
-
-            ZonedDateTime zonedDateTime = createdAt.atZone(ZoneId.systemDefault());
-            Timestamp timestamp = Timestamp.from(zonedDateTime.toInstant());
-            ps.setTimestamp(4, timestamp);
 
             return ps;
         });
@@ -81,7 +73,7 @@ public class BoardRepository{
 
         if (key != null) {
             board.setId(key.intValue());
-            board.setCreatedAt(createdAtDate);
+            board.setCreatedAt(createdAt);
         }
 
         return board;

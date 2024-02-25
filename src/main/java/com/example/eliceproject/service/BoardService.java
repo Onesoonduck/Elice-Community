@@ -2,22 +2,20 @@ package com.example.eliceproject.service;
 
 import com.example.eliceproject.entity.Board;
 import com.example.eliceproject.repository.BoardRepository;
-import com.example.eliceproject.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.example.eliceproject.exception.ServiceLogicException;
 import com.example.eliceproject.exception.ExceptionCode;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BoardService {
 
-    @Autowired
+
     private final BoardRepository boardRepository;
+
+    private Board foundBoard;
 
     public BoardService(BoardRepository boardRepository) {
         this.boardRepository = boardRepository;
