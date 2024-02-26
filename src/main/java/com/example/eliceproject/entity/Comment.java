@@ -3,6 +3,7 @@ package com.example.eliceproject.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -23,9 +24,18 @@ public class Comment {
     @Column(name = "writer", nullable = false)
     private String writer;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime created_at;
+    @Column(name = "createdAt", nullable = false)
+    private LocalDate createdAt;
 
-    private int post_id;
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private Post post;
+
+    public Comment(Post post, String content, String writer, LocalDate createdAt) {
+        this.post = post;
+        this.content = content;
+        this.writer = writer;
+        this.createdAt = LocalDate.now();
+    }
 
 }

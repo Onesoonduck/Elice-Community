@@ -32,17 +32,21 @@ public class Post {
     @Column(name = "viewcount", nullable = false, columnDefinition = "INT DEFAULT 0")
     private int viewcount;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDate created_at;
+    @Column(name = "createdAt", nullable = false)
+    private LocalDate createdAt;
 
     public Post() {
-        this.created_at = LocalDate.now();
+        this.createdAt = LocalDate.now();
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
+    @ManyToOne
+    @JoinColumn(name = "board_id")
     private Board board;
 
-    @OneToMany(mappedBy = "post_id", cascade = CascadeType.ALL)
-    private List<Comment> comments;
+    public void setBoard(Board board) {
+        this.board = board;
+        if (!this.board.getPosts().contains(this)) {
+            this.board.getPosts().add(this);
+        }
+    }
 }

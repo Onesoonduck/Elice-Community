@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("JpaAttributeTypeInspection")
@@ -30,11 +31,18 @@ public class Board {
     @Column(name = "writer", nullable = false)
     private String writer;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDate created_at;
+    @Column(name = "createdAt", nullable = false, columnDefinition = "TIMESTAMP")
+    private LocalDate createdAt;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "board_id")
-    private List<Post> posts;
+    @JoinColumn(name = "board")
+    final private List<Post> posts = new ArrayList<>();
+
+    public Board (String title, String content, String writer, LocalDate createdAt) {
+        this.title = title;
+        this.content = content;
+        this.writer = writer;
+        this.createdAt = createdAt;
+    }
 
 }
