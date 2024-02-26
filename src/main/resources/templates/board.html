@@ -15,7 +15,7 @@
             font-family: "Elice DX Neolli", sans-serif;
         }
     </style>
-    <title th:text="${board.title}">제목</title>
+    <title>커뮤니티</title>
 </head>
 <body>
 <div class="container my-5">
@@ -23,10 +23,10 @@
        style="transition: all 0.1s ease-in-out"
        th:href="@{/main}">&larr; 메인으로 돌아가기</a>
     <div class="header mb-5">
-        <h1 class="text-center" th:text="${board != null ? board.title : ''}">게시판 제목</h1>
+        <h1 class="text-center">커뮤니티</h1>
     </div>
     <div class="d-flex w-100 justify-content-between mb-3">
-        <form th:action="@{/boards/{id}(id=${board.id})}" method="get">
+        <form th:action="@{/boards/{id}(id=${board?.id})}" method="get">
             <div class="input-group">
                 <input class="form-control" name="keyword" placeholder="키워드 검색" th:value="${keyword}"/>
                 <button class="btn btn-primary lh-1 p-0 px-2" type="submit">
@@ -34,30 +34,19 @@
                 </button>
             </div>
         </form>
-        <a th:href="@{/board/write(id=${board.id})}" class="btn btn-primary">게시판 추가</a>
+        <a th:href="@{/board/write(id=${board?.id})}" class="btn btn-primary">게시판 추가</a>
     </div>
     <div class="list-group position-relative mb-3">
         <a class="board-item list-group-item p-3 list-group-item-action"
-           th:unless="${postPage.isEmpty()}"
+           th:unless="${postPage?.isEmpty()}"
            th:each="board : ${postPage}"
-           th:href="@{/post/view/{id}(id=${post.id})}">
-            <h4 class="fw-bold mb-1" th:text="${post.title}">게시판 제목</h4>
-            <small class="text-secondary" th:text="${post.createdAt}">게시판 생성일</small>
+           th:href="@{/board/view/{id}(id=${board?.id})}">
+            <h4 class="fw-bold mb-1" th:text="${board?.title}">게시판 제목</h4>
+            <small class="text-secondary" th:text="${board?.createdAt}">게시판 생성일</small>
         </a>
-        <span th:if="${postPage.isEmpty()}"
+        <span th:if="${postPage?.isEmpty()}"
               class="text-center"
               th:text="${keyword != null ? '`' + keyword + '` 키워드에 해당하는 게시글이 없습니다.' : '올라온 게시글이 없습니다.'}"></span>
-    </div>
-    <div class="w-100 d-flex justify-content-center">
-        <ul class="pagination">
-            <li th:each="i : ${#numbers.sequence(0, postPage.totalPages - 1)}"
-                class="page-item"
-                th:classappend="${i == postPage.number ? 'active' : ''}">
-                <a class="page-link"
-                   th:href="@{/boards/{id}(page=${i}, size=${postPage.size}, id=${board.id}, keyword=${keyword})}"
-                   th:text="${i + 1}">0</a>
-            </li>
-        </ul>
     </div>
 </div>
 

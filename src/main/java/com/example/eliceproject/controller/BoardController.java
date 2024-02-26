@@ -9,10 +9,12 @@ import com.example.eliceproject.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.print.Pageable;
 import java.util.List;
 
 
@@ -32,15 +34,14 @@ public class BoardController {
     // 메인화면
     @GetMapping("/main")
     public String main (Model model) {
-        model.addAttribute("main", boardService.boardList());
+//        model.addAttribute("main", boardService.boardList());
         return "main";
     }
 
     // 게시판
     @GetMapping("/board")
     public String boardlist (Model model) {
-        List<Board> boards = boardService.boardList();
-        model.addAttribute("list", boards);
+        model.addAttribute("list", boardService.boardList());
         return "board";
     }
 
