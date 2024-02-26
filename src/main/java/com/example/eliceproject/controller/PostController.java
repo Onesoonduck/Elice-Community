@@ -4,6 +4,7 @@ import com.example.eliceproject.dto.PostDTO;
 import com.example.eliceproject.mapper.PostMapper;
 import com.example.eliceproject.service.BoardService;
 import com.example.eliceproject.service.CommentService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -12,6 +13,7 @@ import com.example.eliceproject.entity.Post;
 import com.example.eliceproject.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -61,14 +63,24 @@ public class PostController {
 
     // 게시글 작성 후
     @PostMapping("/post/writepro")
-    public String postWritePro(@ModelAttribute PostDTO postDTO, @RequestParam Integer id, Model model) {
+    public String postWritePro(@ModelAttribute @Valid PostDTO postDTO, @RequestParam Integer id, Model model, BindingResult bindingResult) {
 
-       Post post = postMapper.postDTOToPost(postDTO);
-       Post createdPost = postService.postwrite(post, id);
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("errors", bindingResult.getAllErrors());
+            return "errorPage";
+        } else {
+            Integer viewcount = postDTO.getViewcount();
+            if (viewcount == null) {
+                viewcount = 0;
+                postDTO.setViewcount(viewcount);
+            }
+            Post post = postMapper.postDTOToPost(postDTO);
+            Post createdPost = postService.postwrite(post, id);
 
-        model.addAttribute("message", "작성이 완료되었습니다.");
+            model.addAttribute("message", "작성이 완료되었습니다.");
 
-        return "redirect:/post/" + createdPost.getBoard().getId();
+            return "redirect:/post/" + createdPost.getBoard().getId();
+        }
     }
 
     // 선택한 게시물 보기
@@ -81,6 +93,7 @@ public class PostController {
 
     // 게시글 삭제
     @DeleteMapping("/post/delete/{id}")
+    @RequestMapping(value = "/post/delete/{id}", method = RequestMethod.DELETE)
     public String postDelete(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
 
         postService.postDelete(id);
@@ -103,8 +116,9 @@ public class PostController {
         Post postTemp = postService.postView(id);
         postTemp.setTitle(post.getTitle());
         postTemp.setContent(post.getContent());
+        postTemp.setWriter(post.getWriter());
 
-        postService.postwrite(postTemp, id);
+        postService.updatePost(postTemp, id);
 
         model.addAttribute("message", "수정이 완료되었습니다.");
         return "redirect:/post";

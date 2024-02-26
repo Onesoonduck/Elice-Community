@@ -6,5 +6,6 @@ public class ServiceLogicException extends RuntimeException {
     }
 
     public ServiceLogicException(ExceptionCode exceptionCode) {
+        super(exceptionCode.getMessage());
     }
 }

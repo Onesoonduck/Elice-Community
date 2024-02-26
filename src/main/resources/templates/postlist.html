@@ -118,9 +118,9 @@
                         <li class="list1">
                             <a th:text="${post.title}" th:href="@{/post/view/{id}(id=${post.id})}">제목입니다</a>
                         </li>
-                        <li class="list2" >홍길동</li>
-                        <li class="list3" >2024-02-20</li>
-                        <li class="list4">조회수 1</li>
+                        <li class="list2" th:text="${post.writer}">홍길동</li>
+                        <li class="list3" th:text="${post.createdAt}">2024-02-20</li>
+<!--                        <li class="list4" th:text="${post.viewcount}">조회수 1</li>-->
                     </div>
                 </tr>
             </tbody>
