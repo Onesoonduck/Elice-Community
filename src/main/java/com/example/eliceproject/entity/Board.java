@@ -32,13 +32,13 @@ public class Board {
     private String writer;
 
     @Column(name = "createdAt", nullable = false, columnDefinition = "TIMESTAMP")
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "board")
     final private List<Post> posts = new ArrayList<>();
 
-    public Board (String title, String content, String writer, LocalDate createdAt) {
+    public Board (String title, String content, String writer, LocalDateTime createdAt) {
         this.title = title;
         this.content = content;
         this.writer = writer;

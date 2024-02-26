@@ -35,17 +35,14 @@ public class BoardRepository{
                 board.setTitle(resultSet.getString("title"));
                 board.setContent(resultSet.getString("content"));
                 board.setWriter(resultSet.getString("writer"));
-                Timestamp createdAt = resultSet.getTimestamp("createdAt");
-                if (createdAt != null) {
-                    board.setCreatedAt(createdAt.toLocalDateTime().toLocalDate());
-                }
+                board.setCreatedAt(resultSet.getTimestamp("createdAt").toLocalDateTime());
             }
             return board;
         };
     }
 
     public List<Board> findAll() {
-        String sql = "SELECT * FROM Board";
+        String sql = "SELECT * FROM Board ORDER BY createdAt DESC";
         return jdbcTemplate.query(sql, boardRowMapper());
     }
 
@@ -63,7 +60,7 @@ public class BoardRepository{
 
     public Board create(Board board) {
         String insertSql = "INSERT INTO Board (title, content, writer, createdAt) VALUES (?, ?, ?, ?)";
-        LocalDate createdAt = LocalDate.now();
+        LocalDateTime createdAt = LocalDateTime.now();
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {

@@ -61,6 +61,14 @@ public class BoardController {
         return "redirect:/board";
     }
 
+    // 선택한 게시물 보기
+    @GetMapping("/board/post/{id}")
+    public String boardView(@PathVariable("id") Integer id, Model model) {
+
+        model.addAttribute("boardposts", boardService.boardView(id));
+        return "postlist";
+    }
+
     // 게시판 키워드 검색
     @GetMapping("/board/{id}")
     public String getBoard(@PathVariable("id") Integer id,

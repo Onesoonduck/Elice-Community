@@ -38,9 +38,9 @@
     </div>
     <div class="list-group position-relative mb-3">
         <a class="board-item list-group-item p-3 list-group-item-action"
-           th:unless="${postPage?.isEmpty()}"
-           th:each="board : ${postPage}"
-           th:href="@{/board/view/{id}(id=${board?.id})}">
+           th:unless="${list?.isEmpty()}"
+           th:each="board : ${list}"
+           th:href="@{/board/post/{id}(id=${board?.id})}">
             <h4 class="fw-bold mb-1" th:text="${board?.title}">게시판 제목</h4>
             <small class="text-secondary" th:text="${board?.createdAt}">게시판 생성일</small>
         </a>

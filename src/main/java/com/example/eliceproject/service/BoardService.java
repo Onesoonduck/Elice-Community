@@ -30,7 +30,6 @@ public class BoardService {
         return boardRepository.findAll();
     }
 
-
     // 해당 게시판 보기
     public Board boardView(Integer id) {
         Board board = boardRepository.findById(id)
