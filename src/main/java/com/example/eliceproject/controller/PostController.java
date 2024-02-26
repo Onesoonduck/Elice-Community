@@ -66,7 +66,6 @@ public class PostController {
        Post post = postMapper.postDTOToPost(postDTO);
        Post createdPost = postService.postwrite(post, id);
 
-
         model.addAttribute("message", "작성이 완료되었습니다.");
 
         return "redirect:/post/" + createdPost.getBoard().getId();
