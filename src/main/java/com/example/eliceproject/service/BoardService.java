@@ -59,10 +59,12 @@ public class BoardService {
     }
 
     // 게시물 삭제
-    public void boardDelete(Integer id) {
-        foundBoard = boardRepository.findById(id)
-                .orElseThrow(() -> new ServiceLogicException(ExceptionCode.BOARD_NOT_FOUND));
-
-        boardRepository.delete(foundBoard);
+    public void boardDelete(Integer boardId) {
+        Optional<Board> optionalBoard = boardRepository.findById(boardId);
+        if (optionalBoard.isPresent()) {
+            boardRepository.delete(boardId);
+        } else {
+            throw new ServiceLogicException(ExceptionCode.BOARD_NOT_FOUND);
+        }
     }
 }

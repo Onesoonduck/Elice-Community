@@ -55,8 +55,8 @@ public class BoardRepository{
 
     public Board create(Board board) {
         String insertSql = "INSERT INTO Board (title, content, writer, createdAt) VALUES (?, ?, ?, ?)";
-        LocalDateTime createdAt = LocalDateTime.now();
         KeyHolder keyHolder = new GeneratedKeyHolder();
+        LocalDateTime createdAt = LocalDateTime.now();
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(insertSql, new String[]{"id"});
@@ -69,15 +69,14 @@ public class BoardRepository{
 
         }, keyHolder);
 
-        // 생성된 키 가져오기
-        Integer key = keyHolder.getKey().intValue();
-
+        Number key = keyHolder.getKey();
         if (key == null) return board;
         return board.toBuilder()
-                .id(key)
+                .id(key.intValue())
                 .createdAt(createdAt)
                 .build();
     }
+
 
     public Board update(Board board) {
         String updateSql = "UPDATE Board SET title = ?, content = ?, writer = ? WHERE id = ?";
@@ -96,10 +95,10 @@ public class BoardRepository{
 
         return board;
     }
-
-    public void delete(Board board) {
+    public void delete(Integer boardId) {
         String sql = "DELETE FROM Board WHERE id = ?";
-        jdbcTemplate.update(sql, board.getId());
+        jdbcTemplate.update(sql, boardId);
     }
+
 
 }

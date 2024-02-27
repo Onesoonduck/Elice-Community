@@ -53,13 +53,12 @@ public class BoardController {
 
     // 게시판 생성
     @GetMapping("/write")
-    public String boardwriteform() {
+    public String boardWriteForm(Model model) {
         return "board/boardwrite";
     }
 
     @PostMapping("/write")
-    public String boardwrite(@ModelAttribute BoardDTO boardDTO) {
-        Board board = boardMapper.boardDTOToBoard(boardDTO);
+    public String boardWrite(Board board) {
         boardService.boardWrite(board);
 
         return "redirect:/boards";
@@ -86,7 +85,6 @@ public class BoardController {
         return "board/board";
     }
 
-
     // 게시판 수정
     @GetMapping("/modify/{boardId}")
     public String boardModify(@PathVariable Integer boardId, Model model) {
@@ -95,11 +93,10 @@ public class BoardController {
         return "board/boardmodify";
     }
 
-    @PostMapping("/modifyform/{boardId}")
-    public String postUpdate(@PathVariable Integer boardId, @ModelAttribute BoardDTO boardDTO, Model model) {
-        Board board = boardMapper.boardDTOToBoard(boardDTO).toBuilder().id(boardId).build();
+    @PostMapping("/modify/{boardId}")
+    public String postUpdate(@PathVariable Integer boardId, Board board) {
+        board.setId(boardId);
         boardService.boardUpdate(board);
-        model.addAttribute("message", "수정이 완료되었습니다.");
 
         return "redirect:/boards";
     }

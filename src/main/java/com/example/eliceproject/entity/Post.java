@@ -39,6 +39,19 @@ public class Post{
     @JoinColumn(name = "board_id")
     private Board board;
 
+    public Post() {
+        this.createdAt = LocalDateTime.now();
+    }
+
+    public Post(String title, String content, String writer, Integer viewcount, LocalDateTime createdAt, Board board) {
+        this.title = title;
+        this.content = content;
+        this.writer = writer;
+        this.viewcount = viewcount;
+        this.createdAt = createdAt;
+        this.board = board;
+    }
+
     public void setBoard(Board board) {
         if (board != null) {
             this.board = board;
@@ -47,10 +60,5 @@ public class Post{
             }
         }
     }
-
-    public Post() {
-        this.createdAt = LocalDateTime.now();
-    }
-
 
 }

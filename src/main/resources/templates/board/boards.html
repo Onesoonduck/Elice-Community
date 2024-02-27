@@ -103,7 +103,7 @@
                                     class="btn btn-outline-danger lh-1"
                                     data-bs-toggle="modal"
                                     data-bs-target="#deleteModal"
-                                    onclick="handleDeleteButton(e, ${board.id});"
+                                    th:onclick="|handleDeleteButton(event, ${board.id})|"
                             >
                                 <span class="material-symbols-outlined"> delete </span>
                             </button>
@@ -173,7 +173,7 @@
 
 
     function handleDeleteModalButton() {
-        fetch(`/boards/delete${currentBoard}`, {
+        fetch(`/boards/delete/${currentBoard}`, {
             method: "DELETE",
         }).then(() => (window.location.href = "/boards"));
     }
