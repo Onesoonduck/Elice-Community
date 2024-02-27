@@ -1,11 +1,13 @@
 package com.example.eliceproject.controller;
 
 import com.example.eliceproject.dto.PostDTO;
+import com.example.eliceproject.entity.Board;
 import com.example.eliceproject.mapper.PostMapper;
 import com.example.eliceproject.service.BoardService;
 import com.example.eliceproject.service.CommentService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.ui.Model;
@@ -52,6 +54,11 @@ public class PostController {
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
 
+        for (Post post : list.getContent()) {
+            post.setViewcount(post.getViewcount() + 1);
+            postService.savePost(post);
+        }
+
         return "postlist";
     }
 
@@ -79,7 +86,7 @@ public class PostController {
 
             model.addAttribute("message", "작성이 완료되었습니다.");
 
-            return "redirect:/post/" + createdPost.getBoard().getId();
+            return "redirect:/post";
         }
     }
 
@@ -124,4 +131,15 @@ public class PostController {
         return "redirect:/post";
     }
 
+    // 게시글 저장
+    @PostMapping("/post/save")
+    public String savePost (@ModelAttribute PostDTO postDTO, Model model) {
+        Post post = postMapper.postDTOToPost(postDTO);
+        Board board = postDTO.getBoard();
+        post.setBoard(board);
+        postService.savePost(post);
+        model.addAttribute("message", "게시물이 성공적으로 저장되었습니다.");
+
+        return "redirect:/board";
+    }
 }

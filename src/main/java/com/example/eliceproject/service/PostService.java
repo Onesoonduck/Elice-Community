@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PostService {
 
@@ -26,7 +28,7 @@ public class PostService {
         return postRepository.save(post);
     }
 
-    // 게시판 리스트 처리
+    // 게시글 리스트 처리
     public Page<Post> postList(Pageable pageable) {
 
         return postRepository.findAll(pageable);
@@ -63,6 +65,15 @@ public class PostService {
     // 특정 게시글 삭제
     public void postDelete (Integer id) {
         postRepository.deleteById(id);
+    }
+
+    // 게시판에 속한 게시글을 가져오는 메서드
+    public List<Post> findPostByBoardId(Integer boardId) {
+        return postRepository.findByBoardId(boardId);
+    }
+
+    public void savePost(Post post) {
+        postRepository.save(post);
     }
 
 }

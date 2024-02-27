@@ -9,13 +9,12 @@ import com.example.eliceproject.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.awt.print.Pageable;
-import java.util.List;
 
 
 @Controller
@@ -51,40 +50,28 @@ public class BoardController {
         return "boardwrite";
     }
 
-    @PostMapping("/board/writepro")
-    public String boardWritePro(@ModelAttribute BoardDTO boardDTO, Model model) {
-
-        Board board = boardMapper.BoardDTOToBoard(boardDTO);
-        boardService.boardWrite(board);
-        model.addAttribute("message", "작성이 완료되었습니다.");
-
-        return "redirect:/board";
-    }
-
-    // 선택한 게시물 보기
-    @GetMapping("/board/post/{id}")
-    public String boardView(@PathVariable("id") Integer id, Model model) {
-
-        model.addAttribute("boardposts", boardService.boardView(id));
-        return "postlist";
-    }
-
     // 게시판 키워드 검색
-    @GetMapping("/board/{id}")
+    @GetMapping("/board/post/{id}")
     public String getBoard(@PathVariable("id") Integer id,
                            @RequestParam(defaultValue = "0") int page,
                            @RequestParam(defaultValue = "10") int size,
                            @RequestParam(required = false) String keyword,
                            Model model) {
         Board board = boardService.findBoardById(id);
-        PageRequest pageRequest = PageRequest.of(page, size);
-        Page<Post> postPage = postService.findPostsByBoardAndKeyword(board, keyword, pageRequest);
 
-        model.addAttribute("board", board);
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("postPage", postPage);
-        return "board";
+        if (board != null) {
+            model.addAttribute("board", board);
+
+            PageRequest pageRequest = PageRequest.of(page, size, Sort.by("createdAt").descending());
+            Page<Post> postPage = postService.findPostsByBoardAndKeyword(board, keyword, pageRequest);
+
+            model.addAttribute("keyword", keyword);
+            model.addAttribute("postPage", postPage);
+        }
+
+        return "postlist";
     }
+
 
     // 게시판 수정
     @GetMapping("/board/modify/{id}")

@@ -51,8 +51,7 @@ public class BoardRepository{
         try {
             String sql = "SELECT * FROM Board WHERE id = ?";
             Board board = jdbcTemplate.queryForObject(sql, boardRowMapper(), id);
-
-            return Optional.ofNullable(board);
+            return Optional.of(board);
         } catch (EmptyResultDataAccessException ex) {
             return Optional.empty();
         }

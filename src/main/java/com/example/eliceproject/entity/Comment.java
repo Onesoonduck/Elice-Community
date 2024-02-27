@@ -25,17 +25,17 @@ public class Comment {
     private String writer;
 
     @Column(name = "createdAt", nullable = false)
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;
 
-    public Comment(Post post, String content, String writer, LocalDate createdAt) {
+    public Comment(Post post, String content, String writer, LocalDateTime createdAt) {
         this.post = post;
         this.content = content;
         this.writer = writer;
-        this.createdAt = LocalDate.now();
+        this.createdAt = LocalDateTime.now();
     }
 
 }

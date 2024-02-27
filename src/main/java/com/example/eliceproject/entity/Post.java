@@ -30,7 +30,7 @@ public class Post {
     private String writer;
 
     @Column(name = "viewcount", nullable = false, columnDefinition = "INT DEFAULT 0")
-    private int viewcount;
+    private Integer viewcount;
 
     @Column(name = "createdAt", nullable = false)
     private LocalDate createdAt;

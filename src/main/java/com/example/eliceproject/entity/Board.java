@@ -34,8 +34,7 @@ public class Board {
     @Column(name = "createdAt", nullable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime createdAt;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "board")
+    @OneToMany(mappedBy="board", cascade = CascadeType.ALL)
     final private List<Post> posts = new ArrayList<>();
 
     public Board (String title, String content, String writer, LocalDateTime createdAt) {

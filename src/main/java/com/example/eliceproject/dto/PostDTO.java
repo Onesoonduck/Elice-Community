@@ -16,7 +16,7 @@ public class PostDTO {
     private String title;
     private String content;
     private String writer;
-    private int viewcount;
+    private Integer viewcount;
     private LocalDate createdAt;
     private Board board;
 }
