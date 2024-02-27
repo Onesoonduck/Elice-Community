@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.beans.Transient;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PostService {
@@ -24,10 +25,11 @@ public class PostService {
     private BoardService boardService;
 
     // 게시글 작성
-    public Post postwrite(Post post, Integer id) {
-        Board boardToCreate = boardService.findBoardById(id);
+    public Post postwrite(Post post, Integer boardId) {
+        Board boardToCreate = boardService.findBoardById(boardId);
         post.setBoard(boardToCreate);
-        return postRepository.save(post);
+        Post savedPost = postRepository.save(post);
+        return savedPost;
     }
 
     // 게시글 리스트 처리
@@ -36,23 +38,24 @@ public class PostService {
         return postRepository.findAll(pageable);
     }
 
-    public Page<Post> postSearchList(String searchKeyword, Pageable pageable) {
-
-        return postRepository.findByTitleContaining(searchKeyword, pageable);
-    }
-
     // 게시글 수정
-    public Post updatePost(Post post, Integer id) {
-        post.setId(id);
-        Post foundPost = postRepository.findById(post.getId())
+    public Post updatePost(Post post, Integer postId) {
+        Post foundPost = postRepository.findById(postId)
                 .orElseThrow(() -> new ServiceLogicException(ExceptionCode.POST_NOT_FOUND));
+
+        Optional.ofNullable(post.getTitle())
+                .ifPresent(title -> foundPost.setTitle(title));
+        Optional.ofNullable(post.getContent())
+                .ifPresent(content -> foundPost.setContent(content));
+        Optional.ofNullable(post.getWriter())
+                .ifPresent(writer -> foundPost.setWriter(writer));
 
         return postRepository.save(foundPost);
     }
 
     // 특정 게시글 불러오기
-    public Post postView(Integer id) {
-        return postRepository.findById(id).orElseThrow(() -> new RuntimeException("POST_NOT_FOUND"));
+    public Post postView(Integer postId) {
+        return postRepository.findById(postId).orElseThrow(() -> new RuntimeException("POST_NOT_FOUND"));
     }
 
     // 게시판 키워드 검색
@@ -64,19 +67,19 @@ public class PostService {
         }
     }
 
+    // 게시물 찾기
+    public Post findPost(Integer postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new ServiceLogicException(ExceptionCode.POST_NOT_FOUND));
+    }
+
     // 특정 게시글 삭제
     @Transactional
-    public void postDelete (Integer id) {
-        postRepository.deleteById(id);
-    }
+    public void postDelete (Integer postId) {
+        Post foundPost = postRepository.findById(postId)
+                        .orElseThrow(() -> new ServiceLogicException(ExceptionCode.POST_NOT_FOUND);
 
-    // 게시판에 속한 게시글을 가져오는 메서드
-    public List<Post> findPostByBoardId(Integer boardId) {
-        return postRepository.findByBoardId(boardId);
-    }
-
-    public void savePost(Post post) {
-        postRepository.save(post);
+        postRepository.deleteById(postId);
     }
 
 }

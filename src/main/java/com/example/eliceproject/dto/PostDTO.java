@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -17,6 +18,6 @@ public class PostDTO {
     private String content;
     private String writer;
     private Integer viewcount;
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
     private Board board;
 }

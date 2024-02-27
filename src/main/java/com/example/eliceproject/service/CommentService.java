@@ -27,27 +27,32 @@ public class CommentService {
         this.postRepository = postRepository;
     }
 
+    // 댓글
     public List<Comment> findComments() {
         return commentRepository.findAll();
     }
 
+    // 댓글 찾기
     public Comment findComment (Integer CommentId) {
         return commentRepository.findById(CommentId)
                 .orElseThrow(() -> new ServiceLogicException(ExceptionCode.COMMENT_NOT_FOUND));
     }
 
+    // 댓글 검색 리스트
     public List<Comment> findCommentByPostId (Integer postId) {
         return commentRepository.findByPostId(postId);
     }
 
+    // 댓글 작성
     public Comment createComment (Integer postId, Comment comment) {
-        Post post = postRepository.findById(postId).orElseThrow(() -> new ServiceLogicException(ExceptionCode.POST_NOT_FOUND))
+        Post post = postRepository.findById(postId).orElseThrow(() -> new ServiceLogicException(ExceptionCode.POST_NOT_FOUND));
         log.info(post.getTitle());
 
         comment.setPost(post);
         return commentRepository.save(comment);
     }
 
+    // 댓글 수정
     public Comment updateComment (Integer CommentId, Comment comment) {
         Comment foundComment = commentRepository.findById(comment.getId())
                 .orElseThrow(() -> new ServiceLogicException(ExceptionCode.COMMENT_NOT_FOUND));
@@ -58,6 +63,7 @@ public class CommentService {
         return commentRepository.save(foundComment);
     }
 
+    // 댓글 삭제
     public void deleteComment (Integer commentId) {
         Comment foundcomment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new ServiceLogicException(ExceptionCode.COMMENT_NOT_FOUND));
