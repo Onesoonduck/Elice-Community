@@ -28,7 +28,7 @@ public class Comment {
     private LocalDateTime createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "post_id")
+    @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
     public Comment(Post post, String content, String writer, LocalDateTime createdAt) {

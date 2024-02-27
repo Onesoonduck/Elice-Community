@@ -5,12 +5,14 @@ import com.example.eliceproject.entity.Post;
 import com.example.eliceproject.exception.ExceptionCode;
 import com.example.eliceproject.exception.ServiceLogicException;
 import com.example.eliceproject.repository.PostRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.beans.Transient;
 import java.util.List;
 
 @Service
@@ -63,6 +65,7 @@ public class PostService {
     }
 
     // 특정 게시글 삭제
+    @Transactional
     public void postDelete (Integer id) {
         postRepository.deleteById(id);
     }
