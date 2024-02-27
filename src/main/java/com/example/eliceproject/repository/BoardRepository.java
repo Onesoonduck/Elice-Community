@@ -2,22 +2,18 @@ package com.example.eliceproject.repository;
 
 import com.example.eliceproject.entity.Board;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.awt.print.Pageable;
 import java.sql.PreparedStatement;
-import java.sql.Statement;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
 
 @Repository
 public class BoardRepository{
@@ -30,14 +26,13 @@ public class BoardRepository{
 
     private RowMapper<Board> boardRowMapper() {
         return (resultSet, rowNum) -> {
-            Board board = new Board();
-            if (resultSet != null) {
-                board.setTitle(resultSet.getString("title"));
-                board.setContent(resultSet.getString("content"));
-                board.setWriter(resultSet.getString("writer"));
-                board.setCreatedAt(resultSet.getTimestamp("createdAt").toLocalDateTime());
-            }
-            return board;
+            return Board.builder()
+                    .id(resultSet.getInt("id"))
+                    .title(resultSet.getString("title"))
+                    .content(resultSet.getString("content"))
+                    .writer(resultSet.getString("writer"))
+                    .createdAt(resultSet.getTimestamp("createdAt").toLocalDateTime())
+                    .build();
         };
     }
 
@@ -51,7 +46,8 @@ public class BoardRepository{
         try {
             String sql = "SELECT * FROM Board WHERE id = ?";
             Board board = jdbcTemplate.queryForObject(sql, boardRowMapper(), id);
-            return Optional.of(board);
+
+            return Optional.ofNullable(board);
         } catch (EmptyResultDataAccessException ex) {
             return Optional.empty();
         }
@@ -63,24 +59,24 @@ public class BoardRepository{
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = connection.prepareStatement(insertSql, new String[]{"id"});
             ps.setString(1, board.getTitle());
             ps.setString(2, board.getContent());
             ps.setString(3, board.getWriter());
-            ps.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now()));
+            ps.setTimestamp(4, Timestamp.valueOf(createdAt));
 
             return ps;
+
         }, keyHolder);
 
         // 생성된 키 가져오기
-        Number key = keyHolder.getKey();
+        Integer key = keyHolder.getKey().intValue();
 
-        if (key != null) {
-            board.setId(key.intValue());
-            board.setCreatedAt(createdAt);
-        }
-
-        return board;
+        if (key == null) return board;
+        return board.toBuilder()
+                .id(key)
+                .createdAt(createdAt)
+                .build();
     }
 
     public Board update(Board board) {

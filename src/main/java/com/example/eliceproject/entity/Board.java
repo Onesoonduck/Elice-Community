@@ -37,11 +37,10 @@ public class Board {
     @OneToMany(mappedBy="board", cascade = CascadeType.ALL)
     final private List<Post> posts = new ArrayList<>();
 
-    public Board (String title, String content, String writer, LocalDateTime createdAt) {
+    public Board (String title, String content, String writer) {
         this.title = title;
         this.content = content;
         this.writer = writer;
-        this.createdAt = createdAt;
     }
 
 }

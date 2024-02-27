@@ -18,6 +18,5 @@ public class BoardDTO {
     private String content;
     private String writer;
     private LocalDateTime createdAt;
-    private List<Post> posts;
 
 }

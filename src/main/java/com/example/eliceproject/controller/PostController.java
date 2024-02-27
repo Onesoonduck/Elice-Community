@@ -51,7 +51,7 @@ public class PostController {
 
         model.addAttribute("boardId", boardId);
 
-        return "post/postwrite";
+        return "post/boardwrite";
     }
 
     // 게시글 작성

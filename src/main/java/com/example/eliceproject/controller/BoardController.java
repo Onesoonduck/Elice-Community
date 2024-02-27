@@ -14,8 +14,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @Controller
+@RequestMapping("/boards")
 public class BoardController {
 
     @Autowired
@@ -27,76 +30,87 @@ public class BoardController {
     @Autowired
     private BoardMapper boardMapper;
 
+    public BoardController(BoardService boardService, PostService postService, BoardMapper boardMapper) {
+        this.boardService = boardService;
+        this.postService = postService;
+        this.boardMapper = boardMapper;
+    }
 
     // 메인화면
     @GetMapping("/main")
     public String main (Model model) {
-//        model.addAttribute("main", boardService.boardList());
         return "main";
     }
 
     // 게시판
-    @GetMapping("/board")
-    public String boardlist (Model model) {
-        model.addAttribute("list", boardService.boardList());
-        return "board";
+    @GetMapping
+    public String getBoards (Model model) {
+        List<Board> boards = boardService.boardList();
+        model.addAttribute("boards", boards);
+        return "board/boards";
     }
 
     // 게시판 생성
-    @GetMapping("/board/write")
+    @GetMapping("/write")
     public String boardwriteform() {
-        return "boardwrite";
+        return "board/boardwrite";
+    }
+
+    @PostMapping("/write")
+    public String boardwrite(@ModelAttribute BoardDTO boardDTO) {
+        Board board = boardMapper.boardDTOToBoard(boardDTO);
+        boardService.boardWrite(board);
+
+        return "redirect:/boards";
     }
 
     // 게시판 키워드 검색
-    @GetMapping("/board/post/{id}")
-    public String getBoard(@PathVariable("id") Integer id,
+    @GetMapping("/{boardId}")
+    public String getBoard(@PathVariable Integer boardId,
                            @RequestParam(defaultValue = "0") int page,
                            @RequestParam(defaultValue = "10") int size,
                            @RequestParam(required = false) String keyword,
                            Model model) {
-        Board board = boardService.findBoardById(id);
+        Board board = boardService.findBoardById(boardId);
 
         if (board != null) {
-            model.addAttribute("board", board);
-
             PageRequest pageRequest = PageRequest.of(page, size, Sort.by("createdAt").descending());
             Page<Post> postPage = postService.findPostsByBoardAndKeyword(board, keyword, pageRequest);
 
+            model.addAttribute("board", board);
             model.addAttribute("keyword", keyword);
             model.addAttribute("postPage", postPage);
         }
 
-        return "postlist";
+        return "board/board";
     }
 
 
     // 게시판 수정
-    @GetMapping("/board/modify/{id}")
-    public String boardModify(@PathVariable("id") Integer id, Model model) {
-
-        model.addAttribute("board", boardService.boardView(id));
-        return "boardmodify";
+    @GetMapping("/modify/{boardId}")
+    public String boardModify(@PathVariable Integer boardId, Model model) {
+        Board board = boardService.findBoardById(boardId);
+        model.addAttribute("board", board);
+        return "board/boardmodify";
     }
 
-    @PostMapping("/board/update/{id}")
-    public String postUpdate(@PathVariable("id") Integer id, @ModelAttribute BoardDTO boardDTO, Model model) {
-
-        Board board = boardMapper.BoardDTOToBoard(boardDTO).toBuilder().id(id).build();
+    @PostMapping("/modify/{boardId}")
+    public String postUpdate(@PathVariable Integer boardId, @ModelAttribute BoardDTO boardDTO, Model model) {
+        Board board = boardMapper.boardDTOToBoard(boardDTO).toBuilder().id(boardId).build();
         boardService.boardUpdate(board);
         model.addAttribute("message", "수정이 완료되었습니다.");
 
-        return "redirect:/board";
+        return "redirect:/boards";
     }
 
     // 게시판 삭제
-    @DeleteMapping("/board/delete/{id}")
-    public String boardDelete(@PathVariable("id") Integer id, Model model) {
+    @DeleteMapping("/delete/{boardId}")
+    public String boardDelete(@PathVariable Integer boardId, Model model) {
 
-        boardService.boardDelete(id);
+        boardService.boardDelete(boardId);
         model.addAttribute("message", "삭제되었습니다.");
 
-        return "redirect:/board";
+        return "redirect:/boards";
     }
 
 }

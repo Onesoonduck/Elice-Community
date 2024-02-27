@@ -12,6 +12,7 @@ import com.example.eliceproject.exception.ExceptionCode;
 
 import java.awt.print.Pageable;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BoardService {
@@ -30,13 +31,6 @@ public class BoardService {
         return boardRepository.findAll();
     }
 
-    // 해당 게시판 보기
-    public Board boardView(Integer id) {
-        Board board = boardRepository.findById(id)
-                .orElseThrow(() -> new ServiceLogicException(ExceptionCode.BOARD_NOT_FOUND));
-        return board;
-    }
-
     // 게시판 검색
     public Board findBoardById(Integer id) {
         return boardRepository.findById(id)
@@ -50,12 +44,23 @@ public class BoardService {
 
     // 게시물 수정
     public Board boardUpdate(Board board) {
-        return boardRepository.update(board);
+        foundBoard = boardRepository.findById(board.getId())
+                .orElseThrow(() -> new ServiceLogicException(ExceptionCode.BOARD_NOT_FOUND));
+
+        Optional.ofNullable(board.getTitle())
+                .ifPresent(title -> { foundBoard = foundBoard.toBuilder().title(title).build(); });
+
+        foundBoard = foundBoard.toBuilder()
+                .content(board.getContent())
+                .writer(board.getWriter())
+                .build();
+
+        return boardRepository.update(foundBoard);
     }
 
     // 게시물 삭제
     public void boardDelete(Integer id) {
-        Board foundBoard = boardRepository.findById(id)
+        foundBoard = boardRepository.findById(id)
                 .orElseThrow(() -> new ServiceLogicException(ExceptionCode.BOARD_NOT_FOUND));
 
         boardRepository.delete(foundBoard);
