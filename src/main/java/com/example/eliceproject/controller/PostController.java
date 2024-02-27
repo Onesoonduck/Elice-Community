@@ -42,20 +42,20 @@ public class PostController {
         List<Comment> comments = commentService.findCommentByPostId(postId);
         model.addAttribute("comments", comments);
 
-        return "post/post";
+        return "post/postview";
     }
 
     // 게시글 작성
-    @GetMapping("/post/write")
+    @GetMapping("/write")
     public String postWrite(@RequestParam Integer boardId, Model model) {
 
         model.addAttribute("boardId", boardId);
 
-        return "postwrite";
+        return "post/postwrite";
     }
 
     // 게시글 작성
-    @PostMapping("/post/write")
+    @PostMapping("/write")
     public String postWriteForm(@ModelAttribute PostDTO postDTO, @RequestParam Integer boardId, Model model) {
 
         Post post = postMapper.postDTOToPost(postDTO);
@@ -65,15 +65,6 @@ public class PostController {
 
         return "redirect:/boards/" + writedPost.getBoard().getId();
         }
-    }
-
-    // 선택한 게시물 보기
-    @GetMapping("/post/view/{id}")
-    public String postView(@PathVariable("id") Integer postId, Model model) {
-
-        model.addAttribute("post", postService.postView(postId));
-        return "postview";
-    }
 
     // 게시글 삭제
     @DeleteMapping("/{postId}")
@@ -86,8 +77,8 @@ public class PostController {
     }
 
     // 게시글 수정
-    @GetMapping("post/modify/{id}")
-    public String postModify(@PathVariable Integer postId, Model model) {
+    @GetMapping("/update/{id}")
+    public String postUpdateFrom(@PathVariable Integer postId, Model model) {
 
         Post post = postService.findPost(postId);
         model.addAttribute("post", post);
@@ -106,15 +97,4 @@ public class PostController {
         return "redirect:/posts/{postId}";
     }
 
-    // 게시글 저장
-    @PostMapping("/post/save")
-    public String savePost (@ModelAttribute PostDTO postDTO, Model model) {
-        Post post = postMapper.postDTOToPost(postDTO);
-        Board board = postDTO.getBoard();
-        post.setBoard(board);
-        postService.savePost(post);
-        model.addAttribute("message", "게시물이 성공적으로 저장되었습니다.");
-
-        return "redirect:/board";
-    }
 }

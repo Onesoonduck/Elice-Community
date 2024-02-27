@@ -77,7 +77,7 @@ public class PostService {
     @Transactional
     public void postDelete (Integer postId) {
         Post foundPost = postRepository.findById(postId)
-                        .orElseThrow(() -> new ServiceLogicException(ExceptionCode.POST_NOT_FOUND);
+                        .orElseThrow(() -> new ServiceLogicException(ExceptionCode.POST_NOT_FOUND));
 
         postRepository.deleteById(postId);
     }
