@@ -39,7 +39,8 @@ public class BoardController {
     // 메인화면
     @GetMapping("/main")
     public String main (Model model) {
-        return "main";
+
+        return "board/main";
     }
 
     // 게시판
@@ -105,10 +106,9 @@ public class BoardController {
 
     // 게시판 삭제
     @DeleteMapping("/delete/{boardId}")
-    public String boardDelete(@PathVariable Integer boardId, Model model) {
+    public String boardDelete(@PathVariable Integer boardId) {
 
         boardService.boardDelete(boardId);
-        model.addAttribute("message", "삭제되었습니다.");
 
         return "redirect:/boards";
     }

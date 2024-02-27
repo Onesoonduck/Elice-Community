@@ -26,10 +26,18 @@ public class PostService {
 
     // 게시글 작성
     public Post postwrite(Post post, Integer boardId) {
+
         Board boardToCreate = boardService.findBoardById(boardId);
-        post.setBoard(boardToCreate);
-        Post savedPost = postRepository.save(post);
-        return savedPost;
+        if (boardToCreate != null) {
+            post.setBoard(boardToCreate);
+            return postRepository.save(post);
+        } else {
+            try {
+                throw new IllegalAccessException("Board not found for boardId: " + boardId);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     // 게시글 리스트 처리

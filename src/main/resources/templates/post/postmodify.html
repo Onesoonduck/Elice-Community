@@ -1,104 +1,74 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>게시판 수정폼</title>
+  <meta charset="UTF-8" />
+  <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+          crossorigin="anonymous"
+  />
+  <link
+          href="https://font.elice.io/css?family=Elice+DX+Neolli"
+          rel="stylesheet"
+  />
+
+  <style>
+    html,
+    body {
+      font-family: "Elice DX Neolli", sans-serif;
+    }
+  </style>
+  <title>게시글 수정</title>
 </head>
-
-<style>
-  .header {
-    text-align: center!important;
-  }
-
-  .layout {
-    width: 70%;
-    margin: 0 auto;
-    margin-top: 40px;
-  }
-
-  .layout input{
-    width: 100%;
-    box-sizing: board-box
-  }
-
-  .layout textarea {
-    width: 100%;
-    margin-top: 10px;
-    min-height: 300px;
-  }
-
-  .form-control {
-    height: 30px;
-    margin-bottom: 10px;
-  }
-
-  .h3-1 {
-    margin: auto 0;
-  }
-
-  .h3-2 {
-    margin: 10px 0 -5px 0;
-  }
-
-  .writeButton {
-    font-size: 16px;
-    font-weight: bold;
-    color: white;
-    background-color: mediumpurple;
-    border: none;
-    border-radius: 5px;
-    width: 71px;
-    height: 30px;
-    cursor: pointer;
-    position: fixed;
-    right: 15%;
-  }
-
-  input.writer {
-    width: 100px;
-    height: 20px;
-
-  }
-
-</style>
-
 <body>
-
-<div class="header">
-  <h1>게시판 수정</h1>
-</div>
-
-<div class="layout">
-  <form th:action="@{/posts/update/{postId}(postId=${post.id})}" method="post">
-    <div>
-      <h3 class="h3-1">게시판 제목</h3>
+<div class="container my-5">
+  <div class="header mb-5">
+    <h1 class="text-center">게시글 수정</h1>
+  </div>
+  <form
+          th:action="@{/posts/update/{postId}(postId=${post.id})}"
+          method="post"
+  >
+    <div class="mb-3">
+      <label for="title">게시글 제목</label>
+      <input
+              type="text"
+              class="form-control"
+              id="title"
+              name="title"
+              maxlength="30"
+              placeholder="게시글 제목 입력 (최대 30자)"
+              required
+              th:value="${post.title}"
+      />
     </div>
-    <input
-            type="text"
-            class="form-control"
-            id="title"
-            name="title"
-            maxlength="30"
-            placeholder="게시글 제목 입력 (최대 30자)"
-            required
-    />
-    <h3 class="h3-2">게시판 내용</h3>
-    <textarea
-            class="form-control"
-            id="content"
-            name="content"
-            placeholder="내용 입력"
-    ></textarea>
-    <div>
-      <h3 class="h3-1">작성자</h3>
+    <div class="mb-3">
+      <label for="content">내용</label>
+      <textarea
+              class="form-control"
+              id="content"
+              name="content"
+              placeholder="내용 입력"
+              th:text="${post.content}"
+      ></textarea>
     </div>
-    <input type="text"
-           class="writer"
-           name="writer"
-           required/>
-    <button type="submit" class="writeButton">수정</button>
+    <button type="submit" class="btn btn-primary">수정</button>
+    <button
+            type="button"
+            class="btn btn-secondary"
+            onclick="window.history.back();"
+    >
+      취소
+    </button>
   </form>
 </div>
 
+<!-- 부트스트랩 JS 추가 -->
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"
+></script>
 </body>
 </html>

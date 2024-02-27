@@ -15,7 +15,7 @@
             font-family: "Elice DX Neolli", sans-serif;
         }
     </style>
-    <title th:text="${board.title}"></title>
+    <title th:text="${board != null ? board.title : '게시판 제목'}"></title>
 </head>
 <body>
 <div class="container my-5">
@@ -23,7 +23,7 @@
        style="transition: all 0.1s ease-in-out"
        th:href="@{/boards}">&larr; 메인으로 돌아가기</a>
     <div class="header mb-5">
-        <h1 class="text-center" th:text="${board.title}">게시판 제목</h1>
+        <h1 class="text-center" th:text="${board != null ? board.title : '게시판 제목'}">게시판 제목</h1>
     </div>
     <div class="d-flex w-100 justify-content-between mb-3">
         <form th:action="@{/boards/{id}(id=${board?.id})}" method="get">
@@ -44,7 +44,7 @@
             <h4 class="fw-bold mb-1" th:text="${post?.title}">게시판 제목</h4>
             <small class="text-secondary" th:text="${post.createdAt}">게시판 생성일</small>
         </a>
-        <span th:if="${postPage.isEmpty()}"
+        <span th:if="${postPage?.isEmpty()}"
               class="text-center"
               th:text="${keyword != null ? '`' + keyword + '` 키워드에 해당하는 게시글이 없습니다.' : '올라온 게시글이 없습니다.'}"></span>
         <div class="w-100 d-flex justify-content-center">
