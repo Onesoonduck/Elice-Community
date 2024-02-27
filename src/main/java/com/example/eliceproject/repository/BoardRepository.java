@@ -81,6 +81,17 @@ public class BoardRepository{
 
     public Board update(Board board) {
         String updateSql = "UPDATE Board SET title = ?, content = ?, writer = ? WHERE id = ?";
+
+        if (board.getContent() == null) {
+            board.setContent("");
+        }
+        if (board.getWriter() == null) {
+            board.setWriter("");
+        }
+        if (board.getTitle() == null) {
+            board.setTitle("");
+        }
+
         jdbcTemplate.update(updateSql, board.getTitle(), board.getContent(), board.getWriter(), board.getId());
 
         return board;

@@ -94,7 +94,8 @@
                         >
                             <button
                                     class="btn btn-outline-primary lh-1"
-                                    th:onclick="'event.preventDefault(); location.href=\'/boards/' + ${board?.id} + '/edit\''"
+                                    th:onclick="'event.preventDefault(); location.href=\'/boards/modify/' + ${board?.id} + '\''"
+
                             >
                                 <span class="material-symbols-outlined"> edit </span>
                             </button>
@@ -102,7 +103,7 @@
                                     class="btn btn-outline-danger lh-1"
                                     data-bs-toggle="modal"
                                     data-bs-target="#deleteModal"
-                                    onclick="handleDeleteButtonClick(${board.id});"
+                                    onclick="handleDeleteButton(e, ${board.id});"
                             >
                                 <span class="material-symbols-outlined"> delete </span>
                             </button>
@@ -165,9 +166,11 @@
 <script th:inline="javascript">
     let currentBoard;
 
-    function handleDeleteButtonClick(boardId) {
+    function handleDeleteButton(e, boardId) {
+        e.preventDefault();
         currentBoard = boardId;
     }
+
 
     function handleDeleteModalButton() {
         fetch(`/boards/delete${currentBoard}`, {

@@ -95,7 +95,7 @@ public class BoardController {
         return "board/boardmodify";
     }
 
-    @PostMapping("/modify/{boardId}")
+    @PostMapping("/modifyform/{boardId}")
     public String postUpdate(@PathVariable Integer boardId, @ModelAttribute BoardDTO boardDTO, Model model) {
         Board board = boardMapper.boardDTOToBoard(boardDTO).toBuilder().id(boardId).build();
         boardService.boardUpdate(board);

@@ -27,7 +27,7 @@
         <h1 class="text-center">게시판 수정</h1>
     </div>
     <form
-            th:action="@{/boards/modify/{boardId}(boardId=${board.id})}"
+            th:action="@{/boards/modifyform/{boardId}(boardId=${board.id})}"
             method="post"
     >
         <div class="mb-3">
@@ -51,7 +51,7 @@
                     name="description"
                     maxlength="200"
                     placeholder="게시판 설명 입력 (최대 200자)"
-                    th:text="${board.content}"
+                    th:value="${board.content}"
             ></textarea>
         </div>
         <button type="submit" class="btn btn-primary">게시판 수정</button>
