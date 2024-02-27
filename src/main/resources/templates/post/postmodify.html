@@ -53,6 +53,18 @@
               th:text="${post.content}"
       ></textarea>
     </div>
+    <div class="mb-3">
+      <label for="writer">작성자</label>
+      <input
+              type="text"
+              class="form-control"
+              id="writer"
+              name="writer"
+              maxlength="20"
+              placeholder="작성자 (최대 20자)"
+              required
+      />
+    </div>
     <button type="submit" class="btn btn-primary">수정</button>
     <button
             type="button"

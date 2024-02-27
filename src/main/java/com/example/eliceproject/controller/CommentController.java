@@ -12,6 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @AllArgsConstructor
+@RequestMapping("/comments")
 public class CommentController {
 
     @Autowired
@@ -19,6 +20,7 @@ public class CommentController {
     @Autowired
     private CommentMapper commentMapper;
 
+    // 댓글 생성
     @PostMapping
     public String createComment (@ModelAttribute CommentDTO commentDTO, @RequestParam Integer postId, RedirectAttributes redirectAttributes) {
         Comment comment = commentMapper.commentDTOToComment(commentDTO);
@@ -28,16 +30,20 @@ public class CommentController {
         return "redirect:/posts/{postId}";
     }
 
-    @PostMapping("/{commentId}/update")
-    public String updateComment (@PathVariable Integer commentId, @ModelAttribute CommentDTO commentDTO, RedirectAttributes redirectAttributes) {
-        Comment comment = commentMapper.commentDTOToComment(commentDTO);
+    // 댓글 수정
+    @PostMapping("/update/{commentId}")
+    public String updateComment (@PathVariable Integer commentId,Comment comment, RedirectAttributes redirectAttributes) {
+
         Comment updatedComment = commentService.updateComment(commentId, comment);
 
-        redirectAttributes.addAttribute("postId", updatedComment.getPost().getId());
+        if (updatedComment != null) {
+            redirectAttributes.addAttribute("postId", updatedComment.getPost().getId());
+        }
 
         return "redirect:/posts/{postId}";
     }
 
+    // 댓글 삭제
     @DeleteMapping("/{commentId}")
     public String delelteComment (@PathVariable Integer commentId) {
         commentService.deleteComment(commentId);
