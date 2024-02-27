@@ -30,6 +30,7 @@ public class PostService {
         Board boardToCreate = boardService.findBoardById(boardId);
         if (boardToCreate != null) {
             post.setBoard(boardToCreate);
+            post.setViewcount(0);
             return postRepository.save(post);
         } else {
             try {
@@ -63,7 +64,13 @@ public class PostService {
 
     // 특정 게시글 불러오기
     public Post postView(Integer postId) {
-        return postRepository.findById(postId).orElseThrow(() -> new RuntimeException("POST_NOT_FOUND"));
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("POST_NOT_FOUND"));
+
+        post.setViewcount(post.getViewcount() + 1);
+        postRepository.save(post);
+
+        return post;
     }
 
     // 게시판 키워드 검색

@@ -8,6 +8,7 @@ import com.example.eliceproject.exception.ServiceLogicException;
 import com.example.eliceproject.mapper.PostMapper;
 import com.example.eliceproject.service.BoardService;
 import com.example.eliceproject.service.CommentService;
+import jakarta.transaction.Transactional;
 import org.springframework.ui.Model;
 import com.example.eliceproject.entity.Post;
 import com.example.eliceproject.service.PostService;
@@ -34,7 +35,7 @@ public class PostController {
 
     // 게시글
     @GetMapping("/{postId}")
-    public String postList (@PathVariable Integer postId, Model model) {
+    public String postList(@PathVariable Integer postId, Model model) {
 
         Post post = postService.findPost(postId);
         model.addAttribute("post", post);

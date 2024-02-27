@@ -14,6 +14,10 @@
         html, body {
             font-family: "Elice DX Neolli", sans-serif;
         }
+        .viewcount {
+            text-align: right;
+        }
+
     </style>
     <title th:text="${board != null ? board.title : '게시판 제목'}"></title>
 </head>
@@ -40,9 +44,10 @@
         <a class="board-item list-group-item p-3 list-group-item-action"
            th:unless="${postPage.isEmpty()}"
            th:each="post : ${postPage}"
-           th:href="@{posts/{postId}(postId=${post?.id})}">
+           th:href="@{/posts/{postId}(postId=${post?.id})}">
             <h4 class="fw-bold mb-1" th:text="${post?.title}">게시판 제목</h4>
             <small class="text-secondary" th:text="${post.createdAt}">게시판 생성일</small>
+            <small class="viewcount" th:text="${post.viewcount}">조회수</small>
         </a>
         <span th:if="${postPage?.isEmpty()}"
               class="text-center"
