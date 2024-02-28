@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.example.eliceproject.exception.ExceptionCode;
 
 import java.awt.print.Pageable;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,8 +34,12 @@ public class BoardService {
 
     // 게시판 검색
     public Board findBoardById(Integer id) {
-        return boardRepository.findById(id)
+        Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new ServiceLogicException(ExceptionCode.BOARD_NOT_FOUND));
+
+        board.setCreatedAt(LocalDateTime.now());
+
+        return board;
     }
 
     // 게시물 생성

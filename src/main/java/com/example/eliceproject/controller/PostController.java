@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -66,6 +67,7 @@ public class PostController {
             }
             Post post = postMapper.postDTOToPost(postDTO);
             post.setBoard(board);
+            post.setViewcount(0);
             Post writedPost = postService.postwrite(post, boardId);
 
             model.addAttribute("message", "작성이 완료되었습니다.");
@@ -79,11 +81,17 @@ public class PostController {
     }
 
     // 게시글 삭제
-    @DeleteMapping("/{postId}")
+    @DeleteMapping("/delete/{postId}")
     public String postDelete(@PathVariable Integer postId, RedirectAttributes redirectAttributes) {
+        List<Comment> comments = commentService.findCommentsByPostId(postId);
+
+        for (Comment comment : comments) {
+            commentService.deleteComment(comment.getId());
+        }
 
         postService.postDelete(postId);
-        redirectAttributes.addFlashAttribute("message", "삭제되었습니다.");
+
+        redirectAttributes.addFlashAttribute("message", "게시물과 댓글이 삭제되었습니다.");
 
         return "redirect:/posts";
     }
@@ -103,10 +111,9 @@ public class PostController {
         Post post = postMapper.postDTOToPost(postDTO);
         Post updatedPost = postService.updatePost(post, postId);
 
-        redirectAttributes.addAttribute("postId", updatedPost.getId());
         redirectAttributes.addFlashAttribute("message", "수정이 완료되었습니다.");
 
-        return "redirect:/posts/{postId}";
+        return "redirect:/posts/" + updatedPost.getId();
     }
 
 }

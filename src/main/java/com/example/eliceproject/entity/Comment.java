@@ -24,7 +24,7 @@ public class Comment {
     @Column(name = "writer", nullable = false)
     private String writer;
 
-    @Column(name = "createdAt", nullable = false)
+    @Column(name = "createdAt", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @ManyToOne

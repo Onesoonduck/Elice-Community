@@ -1,6 +1,7 @@
 package com.example.eliceproject.controller;
 
 import com.example.eliceproject.dto.CommentDTO;
+import com.example.eliceproject.dto.PostDTO;
 import com.example.eliceproject.entity.Comment;
 import com.example.eliceproject.mapper.CommentMapper;
 import com.example.eliceproject.service.CommentService;
@@ -32,20 +33,19 @@ public class CommentController {
 
     // 댓글 수정
     @PostMapping("/update/{commentId}")
-    public String updateComment (@PathVariable Integer commentId,Comment comment, RedirectAttributes redirectAttributes) {
+    public String updateComment(@PathVariable Integer commentId, @ModelAttribute CommentDTO commentDTO, RedirectAttributes redirectAttributes) {
 
+        Comment comment = commentMapper.commentDTOToComment(commentDTO);
         Comment updatedComment = commentService.updateComment(commentId, comment);
 
-        if (updatedComment != null) {
-            redirectAttributes.addAttribute("postId", updatedComment.getPost().getId());
-        }
+        redirectAttributes.addAttribute("postId", updatedComment.getPost().getId());
 
         return "redirect:/posts/{postId}";
     }
 
     // 댓글 삭제
-    @DeleteMapping("/{commentId}")
-    public String delelteComment (@PathVariable Integer commentId) {
+    @DeleteMapping("/delete/{commentId}")
+    public String deleteComment(@PathVariable Integer commentId) {
         commentService.deleteComment(commentId);
 
         return "redirect:/posts";

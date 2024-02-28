@@ -46,7 +46,11 @@
     <title>커뮤니티</title>
 </head>
 <body>
+
 <div class="container my-5">
+    <a class="link link-offset-1 link-offset-2-hover text-sm fs-6 mb-2 d-block"
+       style="transition: all 0.1s ease-in-out"
+       th:href="@{/boards/main}">&larr; 메인으로 돌아가기</a>
     <div class="header mb-5">
         <h1 class="text-center">커뮤니티</h1>
     </div>
@@ -95,7 +99,6 @@
                             <button
                                     class="btn btn-outline-primary lh-1"
                                     th:onclick="'event.preventDefault(); location.href=\'/boards/modify/' + ${board?.id} + '\''"
-
                             >
                                 <span class="material-symbols-outlined"> edit </span>
                             </button>

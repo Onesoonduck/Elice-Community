@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -76,6 +77,10 @@ public class BoardController {
         if (board != null) {
             PageRequest pageRequest = PageRequest.of(page, size, Sort.by("createdAt").descending());
             Page<Post> postPage = postService.findPostsByBoardAndKeyword(board, keyword, pageRequest);
+
+            for (Post post : postPage.getContent()) {
+                post.setCreatedAt(LocalDateTime.now());
+            }
 
             model.addAttribute("board", board);
             model.addAttribute("keyword", keyword);

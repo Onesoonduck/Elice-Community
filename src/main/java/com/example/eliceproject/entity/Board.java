@@ -31,7 +31,7 @@ public class Board {
     @Column(name = "writer", nullable = false)
     private String writer;
 
-    @Column(name = "createdAt", nullable = false, columnDefinition = "TIMESTAMP")
+    @Column(name = "createdAt", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy="board", cascade = CascadeType.ALL)

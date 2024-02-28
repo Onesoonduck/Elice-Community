@@ -17,12 +17,6 @@
         white-space: nowrap;
     }
 
-    .layout {
-        width: 60%;
-        margin: 0 auto;
-        margin-top: 40px;
-    }
-
     .layout tr {
         width: 100%;
         white-space: nowrap;
@@ -35,8 +29,10 @@
 
     .header {
         display: flex;
-        width: 100%;
+        width: 50%;
         margin: 0 auto;
+        height: 40px;
+        border-collapse: collapse;
     }
 
     .header button {
@@ -45,11 +41,24 @@
         margin: 0 auto;
     }
 
+    .img1 {
+        width: 150px;
+        margin: -200px 0 -50px 0;
+    }
+
+    .img2 {
+        display: flex;
+        width: 100%;
+    }
+
 </style>
 
 <body>
 
 <div class="layout">
+    <div>
+        <img th:src="@{/img/logo}">
+    </div>
     <div>
         <h3>최고의 개발 문화가 깃든 공간</h3>
         <h3>엘리스Lab에서 함께 공부하고 성장해요</h3>
@@ -62,6 +71,11 @@
             <button>예약</button>
             <button><a th:href="@{/boards}">커뮤니티</a></button>
         </div>
+
+    <div>
+        <img class="img2" src="../../../java/com/example/eliceproject/img/elicelab_3.jpg" alt="엘리스랩">
+    </div>
+
 </div>
 </body>
 </html>

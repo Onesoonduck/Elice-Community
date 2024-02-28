@@ -2,6 +2,7 @@ package com.example.eliceproject.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -32,7 +33,7 @@ public class Post{
     @Column(name = "viewcount", nullable = false, columnDefinition = "INT DEFAULT 0")
     private Integer viewcount;
 
-    @Column(name = "createdAt", nullable = false, columnDefinition = "TIMESTAMP")
+    @Column(name = "createdAt", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @ManyToOne

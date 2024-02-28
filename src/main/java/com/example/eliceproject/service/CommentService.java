@@ -40,6 +40,11 @@ public class CommentService {
                 .orElseThrow(() -> new ServiceLogicException(ExceptionCode.COMMENT_NOT_FOUND));
     }
 
+    // 게시물 ID로 댓글 리스트 조회
+    public List<Comment> findCommentsByPostId(Integer postId) {
+        return commentRepository.findByPostId(postId);
+    }
+
     // 댓글 검색 리스트
     public List<Comment> findCommentByPostId (Integer postId) {
         return commentRepository.findByPostId(postId);
@@ -57,12 +62,14 @@ public class CommentService {
     }
 
     // 댓글 수정
-    public Comment updateComment (Integer CommentId, Comment comment) {
-        Comment foundComment = commentRepository.findById(comment.getId())
+    public Comment updateComment (Integer commentId, Comment comment) {
+        Comment foundComment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new ServiceLogicException(ExceptionCode.COMMENT_NOT_FOUND));
 
         Optional.ofNullable(comment.getContent())
                 .ifPresent(content -> foundComment.setContent(content));
+        Optional.ofNullable(comment.getWriter())
+                .ifPresent(writer -> foundComment.setWriter(writer));
 
         return commentRepository.save(foundComment);
     }

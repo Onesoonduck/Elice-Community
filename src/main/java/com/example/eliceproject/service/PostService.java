@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.beans.Transient;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +31,6 @@ public class PostService {
         Board boardToCreate = boardService.findBoardById(boardId);
         if (boardToCreate != null) {
             post.setBoard(boardToCreate);
-            post.setViewcount(0);
             return postRepository.save(post);
         } else {
             try {

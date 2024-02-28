@@ -14,9 +14,6 @@
         html, body {
             font-family: "Elice DX Neolli", sans-serif;
         }
-        .viewcount {
-            text-align: right;
-        }
 
     </style>
     <title th:text="${board != null ? board.title : '게시판 제목'}"></title>
@@ -25,7 +22,7 @@
 <div class="container my-5">
     <a class="link link-offset-1 link-offset-2-hover text-sm fs-6 mb-2 d-block"
        style="transition: all 0.1s ease-in-out"
-       th:href="@{/boards}">&larr; 메인으로 돌아가기</a>
+       th:href="@{/boards}">&larr; 게시판으로 돌아가기</a>
     <div class="header mb-5">
         <h1 class="text-center" th:text="${board != null ? board.title : '게시판 제목'}">게시판 제목</h1>
     </div>
@@ -46,8 +43,8 @@
            th:each="post : ${postPage}"
            th:href="@{/posts/{postId}(postId=${post?.id})}">
             <h4 class="fw-bold mb-1" th:text="${post?.title}">게시판 제목</h4>
-            <small class="text-secondary" th:text="${post.createdAt}">게시판 생성일</small>
-            <small class="viewcount" th:text="${post.viewcount}">조회수</small>
+            <small class="writer" th:text="${post?.writer}">작성자</small>
+            <small class="text-secondary" th:text="${#temporals.format(post.createdAt, 'yyyy.MM.dd HH:mm')}">게시글 생성일</small>
         </a>
         <span th:if="${postPage?.isEmpty()}"
               class="text-center"
