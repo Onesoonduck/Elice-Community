@@ -84,8 +84,12 @@ public class PostService {
 
     // 게시물 찾기
     public Post findPost(Integer postId) {
-        return postRepository.findById(postId)
+        Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new ServiceLogicException(ExceptionCode.POST_NOT_FOUND));
+
+        post.setViewcount(post.getViewcount() + 1);
+
+        return postRepository.save(post);
     }
 
     // 특정 게시글 삭제
