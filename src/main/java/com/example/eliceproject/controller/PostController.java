@@ -1,22 +1,28 @@
 package com.example.eliceproject.controller;
 
 import com.example.eliceproject.dto.PostDTO;
+import com.example.eliceproject.entity.Board;
+import com.example.eliceproject.entity.Comment;
+import com.example.eliceproject.exception.ExceptionCode;
+import com.example.eliceproject.exception.ServiceLogicException;
 import com.example.eliceproject.mapper.PostMapper;
 import com.example.eliceproject.service.BoardService;
 import com.example.eliceproject.service.CommentService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
+import jakarta.transaction.Transactional;
 import org.springframework.ui.Model;
 import com.example.eliceproject.entity.Post;
 import com.example.eliceproject.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Controller
+@RequestMapping("/posts")
 public class PostController {
 
     @Autowired
@@ -28,86 +34,86 @@ public class PostController {
     @Autowired
     private CommentService commentService;
 
-    // 게시글 게시판
-    @GetMapping("/post")
-    public String postList(Model model,
-                           @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable, String searchKeyword) {
+    // 게시글
+    @GetMapping("/{postId}")
+    public String postList(@PathVariable Integer postId, Model model) {
 
-        Page<Post> list = null;
-        if (searchKeyword == null) {
-            list = postService.postList(pageable);
-        } else {
-            list = postService.postSearchList(searchKeyword, pageable);
-        }
+        Post post = postService.findPost(postId);
+        model.addAttribute("post", post);
 
-        int nowPage = list.getPageable().getPageNumber() + 1;
-        int startPage = Math.max(nowPage - 4, 1);
-        int endPage = Math.min(nowPage + 5, list.getTotalPages());
+        List<Comment> comments = commentService.findCommentByPostId(postId);
+        model.addAttribute("comments", comments);
 
-        model.addAttribute("list", list);
-        model.addAttribute("nowPage", nowPage);
-        model.addAttribute("startPage", startPage);
-        model.addAttribute("endPage", endPage);
-
-        return "postlist";
+        return "post/postview";
     }
 
     // 게시글 작성
-    @GetMapping("/post/write")
-    public String postWriteForm() {
-        return "postwrite";
+    @GetMapping("/write")
+    public String postWrite(@RequestParam Integer boardId, Model model) {
+
+        model.addAttribute("boardId", boardId);
+
+        return "post/postwrite";
     }
 
-    // 게시글 작성 후
-    @PostMapping("/post/writepro")
-    public String postWritePro(@ModelAttribute PostDTO postDTO, @RequestParam Integer id, Model model) {
+    // 게시글 작성
+    @PostMapping("/writepro")
+    public String postWriteForm(@ModelAttribute PostDTO postDTO, @RequestParam Integer boardId, Model model) {
 
-       Post post = postMapper.postDTOToPost(postDTO);
-       Post createdPost = postService.postwrite(post, id);
+        try {
+            Board board = boardService.findBoardById(boardId);
+            if (board == null) {
+                throw new ServiceLogicException(ExceptionCode.BOARD_NOT_FOUND);
+            }
+            Post post = postMapper.postDTOToPost(postDTO);
+            post.setBoard(board);
+            post.setViewcount(0);
+            Post writedPost = postService.postwrite(post, boardId);
 
-        model.addAttribute("message", "작성이 완료되었습니다.");
+            model.addAttribute("message", "작성이 완료되었습니다.");
 
-        return "redirect:/post/" + createdPost.getBoard().getId();
-    }
+            return "redirect:/boards/" + writedPost.getBoard().getId();
 
-    // 선택한 게시물 보기
-    @GetMapping("/post/view/{id}")
-    public String postView(@PathVariable("id") Integer id, Model model) {
-
-        model.addAttribute("post", postService.postView(id));
-        return "postview";
+        } catch (ServiceLogicException ex) {
+            model.addAttribute("error", ex.getMessage());
+            return "error-page";
+        }
     }
 
     // 게시글 삭제
-    @DeleteMapping("/post/delete/{id}")
-    public String postDelete(@PathVariable("id") Integer id, Model model) {
+    @DeleteMapping("/delete/{postId}")
+    public String postDelete(@PathVariable Integer postId, RedirectAttributes redirectAttributes) {
+        List<Comment> comments = commentService.findCommentsByPostId(postId);
 
-        postService.postDelete(id);
+        for (Comment comment : comments) {
+            commentService.deleteComment(comment.getId());
+        }
 
-        model.addAttribute("message", "삭제되었습니다.");
+        postService.postDelete(postId);
 
-        return "redirect:/post";
+        redirectAttributes.addFlashAttribute("message", "게시물과 댓글이 삭제되었습니다.");
+
+        return "redirect:/posts";
     }
 
-    // 게시글 수정하는 화면
-    @GetMapping("post/modify/{id}")
-    public String postModify(@PathVariable("id") Integer id, Model model) {
+    // 게시글 수정
+    @GetMapping("/update/{postId}")
+    public String postUpdateFrom(@PathVariable Integer postId, Model model) {
 
-        model.addAttribute("post", postService.postView(id));
-        return "postmodify";
+        Post post = postService.findPost(postId);
+        model.addAttribute("post", post);
+        return "post/postmodify";
     }
 
-    // 게시글 수정된 화면
-    @PostMapping("/post/update/{id}")
-    public String postUpdate(Post post, @PathVariable("id") Integer id, Model model) {
-        Post postTemp = postService.postView(id);
-        postTemp.setTitle(post.getTitle());
-        postTemp.setContent(post.getContent());
+    @PostMapping("/update/{postId}")
+    public String postUpdate(@PathVariable Integer postId, @ModelAttribute PostDTO postDTO, RedirectAttributes redirectAttributes) {
 
-        postService.postwrite(postTemp, id);
+        Post post = postMapper.postDTOToPost(postDTO);
+        Post updatedPost = postService.updatePost(post, postId);
 
-        model.addAttribute("message", "수정이 완료되었습니다.");
-        return "redirect:/post";
+        redirectAttributes.addFlashAttribute("message", "수정이 완료되었습니다.");
+
+        return "redirect:/posts/" + updatedPost.getId();
     }
 
 }

@@ -34,6 +34,22 @@
         .comment:hover .btn-group {
             display: flex;
         }
+
+        .writer-textarea {
+            width: 120px;
+            height: 30px;
+            margin: 0 0 4px 13px;
+            border: 1px solid #DEE2E6;
+            border-radius: 4.5px;
+        }
+
+        .writer-textarea2 {
+            height: 30px;
+            border: 1px solid #DEE2E6;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
     </style>
     <title th:text="${post.title}"></title>
 </head>
@@ -71,8 +87,8 @@
             >
                 <div class="card-body position-relative">
                     <p class="mb-2" th:text="${comment.content}">댓글 내용</p>
-                    <small class="text-secondary">2024-01-04T13:21:21</small>
-
+                    <small class="writer" th:text="${comment.writer}">작성자</small>
+                    <small class="text-secondary" th:text="${#temporals.format(comment.createdAt, 'yyyy.MM.dd HH:mm')}">2024-01-04T13:21:21</small>
                     <div
                             class="position-absolute end-0 top-50 translate-middle-y mb-3 me-3 btn-group bg-white bg-opacity-75"
                             role="group"
@@ -82,7 +98,7 @@
                                 class="btn btn-outline-primary lh-1"
                                 data-bs-toggle="modal"
                                 data-bs-target="#editCommentModal"
-                                th:onclick="handleEditCommentButton(event, [[${comment.id}]], [[${comment.content}]]);"
+                                th:onclick="handleEditCommentButton(event, [[${comment.id}]], [[${comment.content}]], [[${comment.writer}]]);"
                         >
                             <span class="material-symbols-outlined"> edit </span>
                         </button>
@@ -109,6 +125,12 @@
                 th:action="@{/comments(postId=${post.id})}"
                 method="POST"
         >
+            <textarea
+                    class="writer-textarea"
+                    name="writer"
+                    cols="6"
+                    placeholder="작성자"
+            ></textarea>
             <div class="input-group">
             <textarea
                     class="form-control"
@@ -133,7 +155,7 @@
                 <li>
                     <button
                             class="dropdown-item d-flex align-items-center gap-2"
-                            th:onclick="'location.href=\'/posts/' + ${post.id} + '/edit\''"
+                            th:onclick="'location.href=\'/posts/update/' + ${post.id} + '\''"
                     >
                         <span class="material-symbols-outlined"> edit </span>수정
                     </button>
@@ -143,7 +165,7 @@
                             class="dropdown-item text-danger btn btn-danger d-flex align-items-center gap-2"
                             data-bs-toggle="modal"
                             data-bs-target="#deletePostModal"
-                            th:onclick="handleDeletePostButton(event, [[${post.id}]], [[${post.board.id}]]);"
+                            th:onclick="'handleDeletePostButton(event, \'' + ${post.id} + '\', \'' + ${post.board.id} + '\');'"
                     >
                         <span class="material-symbols-outlined"> delete </span>삭제
                     </button>
@@ -218,6 +240,13 @@
             </div>
             <form id="commentEditForm" method="POST">
                 <div class="modal-body">
+                    <textarea
+                            class="writer-textarea2"
+                            name="writer"
+                            cols="6"
+                            id="commentWriterTextarea"
+                            placeholder="작성자..."
+                    ></textarea>
               <textarea
                       class="form-control"
                       name="content"
@@ -301,7 +330,7 @@
     }
 
     function handleDeletePostModalButton() {
-        fetch(`/posts/${currentPost}`, {
+        fetch(`/posts/delete/${currentPost}`, {
             method: "DELETE",
         }).then(() => (window.location.href = `/boards/${currentBoard}`));
     }
@@ -312,7 +341,7 @@
     }
 
     function handleDeleteCommentModalButton() {
-        fetch(`/comments/${currentComment}`, {
+        fetch(`/comments/delete/${currentComment}`, {
             method: "DELETE",
         }).then(() => elementToDelete.remove());
 
@@ -323,12 +352,13 @@
         modal.hide();
     }
 
-    function handleEditCommentButton(_, commentId, content) {
-        document.getElementById("commentContentTextarea").innerText = content;
-        document
-            .getElementById("commentEditForm")
-            .setAttribute("action", `/comments/${commentId}/edit`);
+    function handleEditCommentButton(_, commentId, content, writer) {
+        document.getElementById("commentContentTextarea").value = content;
+        document.getElementById("commentWriterTextarea").value = writer;
+
+        document.getElementById("commentEditForm").setAttribute("action", `/comments/update/${commentId}`);
     }
+
 </script>
 </body>
 </html>

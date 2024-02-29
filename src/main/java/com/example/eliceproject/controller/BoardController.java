@@ -14,11 +14,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.print.Pageable;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
 @Controller
+@RequestMapping("/boards")
 public class BoardController {
 
     @Autowired
@@ -30,80 +31,88 @@ public class BoardController {
     @Autowired
     private BoardMapper boardMapper;
 
+    public BoardController(BoardService boardService, PostService postService, BoardMapper boardMapper) {
+        this.boardService = boardService;
+        this.postService = postService;
+        this.boardMapper = boardMapper;
+    }
 
     // 메인화면
     @GetMapping("/main")
     public String main (Model model) {
-//        model.addAttribute("main", boardService.boardList());
-        return "main";
+
+        return "board/main";
     }
 
     // 게시판
-    @GetMapping("/board")
-    public String boardlist (Model model) {
-        model.addAttribute("list", boardService.boardList());
-        return "board";
+    @GetMapping
+    public String getBoards (Model model) {
+        List<Board> boards = boardService.boardList();
+        model.addAttribute("boards", boards);
+        return "board/boards";
     }
 
     // 게시판 생성
-    @GetMapping("/board/write")
-    public String boardwriteform() {
-        return "boardwrite";
+    @GetMapping("/write")
+    public String boardWriteForm(Model model) {
+        return "board/boardwrite";
     }
 
-    @PostMapping("/board/writepro")
-    public String boardWritePro(@ModelAttribute BoardDTO boardDTO, Model model) {
-
-        Board board = boardMapper.BoardDTOToBoard(boardDTO);
+    @PostMapping("/write")
+    public String boardWrite(Board board) {
         boardService.boardWrite(board);
-        model.addAttribute("message", "작성이 완료되었습니다.");
 
-        return "redirect:/board";
+        return "redirect:/boards";
     }
 
     // 게시판 키워드 검색
-    @GetMapping("/board/{id}")
-    public String getBoard(@PathVariable("id") Integer id,
+    @GetMapping("/{boardId}")
+    public String getBoard(@PathVariable Integer boardId,
                            @RequestParam(defaultValue = "0") int page,
                            @RequestParam(defaultValue = "10") int size,
                            @RequestParam(required = false) String keyword,
                            Model model) {
-        Board board = boardService.findBoardById(id);
-        PageRequest pageRequest = PageRequest.of(page, size);
-        Page<Post> postPage = postService.findPostsByBoardAndKeyword(board, keyword, pageRequest);
+        Board board = boardService.findBoardById(boardId);
 
-        model.addAttribute("board", board);
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("postPage", postPage);
-        return "board";
+        if (board != null) {
+            PageRequest pageRequest = PageRequest.of(page, size, Sort.by("createdAt").descending());
+            Page<Post> postPage = postService.findPostsByBoardAndKeyword(board, keyword, pageRequest);
+
+            for (Post post : postPage.getContent()) {
+                post.setCreatedAt(LocalDateTime.now());
+            }
+
+            model.addAttribute("board", board);
+            model.addAttribute("keyword", keyword);
+            model.addAttribute("postPage", postPage);
+        }
+
+        return "board/board";
     }
 
     // 게시판 수정
-    @GetMapping("/board/modify/{id}")
-    public String boardModify(@PathVariable("id") Integer id, Model model) {
-
-        model.addAttribute("board", boardService.boardView(id));
-        return "boardmodify";
+    @GetMapping("/modify/{boardId}")
+    public String boardModify(@PathVariable Integer boardId, Model model) {
+        Board board = boardService.findBoardById(boardId);
+        model.addAttribute("board", board);
+        return "board/boardmodify";
     }
 
-    @PostMapping("/board/update/{id}")
-    public String postUpdate(@PathVariable("id") Integer id, @ModelAttribute BoardDTO boardDTO, Model model) {
-
-        Board board = boardMapper.BoardDTOToBoard(boardDTO).toBuilder().id(id).build();
+    @PostMapping("/modify/{boardId}")
+    public String postUpdate(@PathVariable Integer boardId, Board board) {
+        board.setId(boardId);
         boardService.boardUpdate(board);
-        model.addAttribute("message", "수정이 완료되었습니다.");
 
-        return "redirect:/board";
+        return "redirect:/boards";
     }
 
     // 게시판 삭제
-    @DeleteMapping("/board/delete/{id}")
-    public String boardDelete(@PathVariable("id") Integer id, Model model) {
+    @DeleteMapping("/delete/{boardId}")
+    public String boardDelete(@PathVariable Integer boardId) {
 
-        boardService.boardDelete(id);
-        model.addAttribute("message", "삭제되었습니다.");
+        boardService.boardDelete(boardId);
 
-        return "redirect:/board";
+        return "redirect:/boards";
     }
 
 }

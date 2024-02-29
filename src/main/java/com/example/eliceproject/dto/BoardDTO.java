@@ -4,6 +4,7 @@ import com.example.eliceproject.entity.Post;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -16,7 +17,6 @@ public class BoardDTO {
     private String title;
     private String content;
     private String writer;
-    private LocalDate createdAt;
-    private List<Post> posts;
+    private LocalDateTime createdAt;
 
 }

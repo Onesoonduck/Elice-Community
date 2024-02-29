@@ -5,11 +5,17 @@ import com.example.eliceproject.entity.Post;
 import com.example.eliceproject.exception.ExceptionCode;
 import com.example.eliceproject.exception.ServiceLogicException;
 import com.example.eliceproject.repository.PostRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.beans.Transient;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PostService {
@@ -20,35 +26,51 @@ public class PostService {
     private BoardService boardService;
 
     // 게시글 작성
-    public Post postwrite(Post post, Integer id) {
-        Board boardToCreate = boardService.findBoardById(id);
-        post.setBoard(boardToCreate);
-        return postRepository.save(post);
+    public Post postwrite(Post post, Integer boardId) {
+
+        Board boardToCreate = boardService.findBoardById(boardId);
+        if (boardToCreate != null) {
+            post.setBoard(boardToCreate);
+            return postRepository.save(post);
+        } else {
+            try {
+                throw new IllegalAccessException("Board not found for boardId: " + boardId);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
-    // 게시판 리스트 처리
+    // 게시글 리스트 처리
     public Page<Post> postList(Pageable pageable) {
 
         return postRepository.findAll(pageable);
     }
 
-    public Page<Post> postSearchList(String searchKeyword, Pageable pageable) {
-
-        return postRepository.findByTitleContaining(searchKeyword, pageable);
-    }
-
     // 게시글 수정
-    public Post updatePost(Post post, Integer id) {
-        post.setId(id);
-        Post foundPost = postRepository.findById(post.getId())
+    public Post updatePost(Post post, Integer postId) {
+        Post foundPost = postRepository.findById(postId)
                 .orElseThrow(() -> new ServiceLogicException(ExceptionCode.POST_NOT_FOUND));
+
+        Optional.ofNullable(post.getTitle())
+                .ifPresent(title -> foundPost.setTitle(title));
+        Optional.ofNullable(post.getContent())
+                .ifPresent(content -> foundPost.setContent(content));
+        Optional.ofNullable(post.getWriter())
+                .ifPresent(writer -> foundPost.setWriter(writer));
 
         return postRepository.save(foundPost);
     }
 
     // 특정 게시글 불러오기
-    public Post postView(Integer id) {
-        return postRepository.findById(id).orElseThrow(() -> new RuntimeException("POST_NOT_FOUND"));
+    public Post postView(Integer postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("POST_NOT_FOUND"));
+
+        post.setViewcount(post.getViewcount() + 1);
+        postRepository.save(post);
+
+        return post;
     }
 
     // 게시판 키워드 검색
@@ -60,9 +82,23 @@ public class PostService {
         }
     }
 
+    // 게시물 찾기
+    public Post findPost(Integer postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new ServiceLogicException(ExceptionCode.POST_NOT_FOUND));
+
+        post.setViewcount(post.getViewcount() + 1);
+
+        return postRepository.save(post);
+    }
+
     // 특정 게시글 삭제
-    public void postDelete (Integer id) {
-        postRepository.deleteById(id);
+    @Transactional
+    public void postDelete (Integer postId) {
+        Post foundPost = postRepository.findById(postId)
+                        .orElseThrow(() -> new ServiceLogicException(ExceptionCode.POST_NOT_FOUND));
+
+        postRepository.deleteById(postId);
     }
 
 }

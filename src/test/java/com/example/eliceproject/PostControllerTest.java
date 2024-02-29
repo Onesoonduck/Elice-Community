@@ -16,17 +16,5 @@ import org.springframework.test.web.servlet.MockMvc;
 @AutoConfigureMockMvc
 class TestData {
 
-    @Autowired
-    private BoardRepository boardRepository;
 
-    @Test
-    void initDate () throws Exception {
-        Board board = Board.builder()
-                .title("제목 1")
-                .content("내용 1")
-                .writer("이름 1")
-                .build();
-        
-        boardRepository.save(board);
-    }
 }

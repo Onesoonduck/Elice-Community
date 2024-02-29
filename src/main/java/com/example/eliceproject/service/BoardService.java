@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import com.example.eliceproject.exception.ExceptionCode;
 
 import java.awt.print.Pageable;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BoardService {
@@ -30,18 +32,14 @@ public class BoardService {
         return boardRepository.findAll();
     }
 
-
-    // 해당 게시판 보기
-    public Board boardView(Integer id) {
-        Board board = boardRepository.findById(id)
-                .orElseThrow(() -> new ServiceLogicException(ExceptionCode.BOARD_NOT_FOUND));
-        return board;
-    }
-
     // 게시판 검색
     public Board findBoardById(Integer id) {
-        return boardRepository.findById(id)
+        Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new ServiceLogicException(ExceptionCode.BOARD_NOT_FOUND));
+
+        board.setCreatedAt(LocalDateTime.now());
+
+        return board;
     }
 
     // 게시물 생성
@@ -51,14 +49,27 @@ public class BoardService {
 
     // 게시물 수정
     public Board boardUpdate(Board board) {
-        return boardRepository.update(board);
+        foundBoard = boardRepository.findById(board.getId())
+                .orElseThrow(() -> new ServiceLogicException(ExceptionCode.BOARD_NOT_FOUND));
+
+        Optional.ofNullable(board.getTitle())
+                .ifPresent(title -> { foundBoard = foundBoard.toBuilder().title(title).build(); });
+
+        foundBoard = foundBoard.toBuilder()
+                .content(board.getContent())
+                .writer(board.getWriter())
+                .build();
+
+        return boardRepository.update(foundBoard);
     }
 
     // 게시물 삭제
-    public void boardDelete(Integer id) {
-        Board foundBoard = boardRepository.findById(id)
-                .orElseThrow(() -> new ServiceLogicException(ExceptionCode.BOARD_NOT_FOUND));
-
-        boardRepository.delete(foundBoard);
+    public void boardDelete(Integer boardId) {
+        Optional<Board> optionalBoard = boardRepository.findById(boardId);
+        if (optionalBoard.isPresent()) {
+            boardRepository.delete(boardId);
+        } else {
+            throw new ServiceLogicException(ExceptionCode.BOARD_NOT_FOUND);
+        }
     }
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
           rel="stylesheet"
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
@@ -14,16 +14,20 @@
         html, body {
             font-family: "Elice DX Neolli", sans-serif;
         }
+        .viewcount {
+            padding-left: 450px;
+        }
+
     </style>
-    <title>커뮤니티</title>
+    <title th:text="${board != null ? board.title : '게시판 제목'}"></title>
 </head>
 <body>
 <div class="container my-5">
     <a class="link link-offset-1 link-offset-2-hover text-sm fs-6 mb-2 d-block"
        style="transition: all 0.1s ease-in-out"
-       th:href="@{/main}">&larr; 메인으로 돌아가기</a>
+       th:href="@{/boards}">&larr; 게시판으로 돌아가기</a>
     <div class="header mb-5">
-        <h1 class="text-center">커뮤니티</h1>
+        <h1 class="text-center" th:text="${board != null ? board.title : '게시판 제목'}">게시판 제목</h1>
     </div>
     <div class="d-flex w-100 justify-content-between mb-3">
         <form th:action="@{/boards/{id}(id=${board?.id})}" method="get">
@@ -34,19 +38,35 @@
                 </button>
             </div>
         </form>
-        <a th:href="@{/board/write(id=${board?.id})}" class="btn btn-primary">게시판 추가</a>
+        <a th:href="@{/posts/write(boardId=${board?.id})}" class="btn btn-primary">게시글 추가</a>
     </div>
     <div class="list-group position-relative mb-3">
         <a class="board-item list-group-item p-3 list-group-item-action"
-           th:unless="${postPage?.isEmpty()}"
-           th:each="board : ${postPage}"
-           th:href="@{/board/view/{id}(id=${board?.id})}">
-            <h4 class="fw-bold mb-1" th:text="${board?.title}">게시판 제목</h4>
-            <small class="text-secondary" th:text="${board?.createdAt}">게시판 생성일</small>
+           th:unless="${postPage.isEmpty()}"
+           th:each="post : ${postPage}"
+           th:href="@{/posts/{postId}(postId=${post?.id})}">
+            <h4 class="fw-bold mb-1" th:text="${post?.title}">게시판 제목</h4>
+            <small class="writer" th:text="${post?.writer}">작성자</small>
+            <small class="text-secondary" th:text="${#temporals.format(post.createdAt, 'yyyy.MM.dd HH:mm')}">게시글 생성일</small>
+            <small class="viewcount" th:text="${post.viewcount}">조회수</small>
         </a>
         <span th:if="${postPage?.isEmpty()}"
               class="text-center"
               th:text="${keyword != null ? '`' + keyword + '` 키워드에 해당하는 게시글이 없습니다.' : '올라온 게시글이 없습니다.'}"></span>
+        <div class="w-100 d-flex justify-content-center">
+            <ul class="pagination">
+                <li th:each="i : ${postPage.totalPages > 1 ? #numbers.sequence(0, postPage.totalPages - 1) : #numbers.sequence(0, 0)}"
+                        class="page-item"
+                        th:classappend="${i == postPage.number ? 'active' : ''}">
+                    <a
+                            class="page-link"
+                            th:href="@{/boards/{boardId}(page=${i}, size=${postPage.size}, boardId=${board.id}, keyword=${keyword})}"
+                            th:text="${i + 1}"
+                    >0</a
+                    >
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
 

@@ -1,23 +1,21 @@
 package com.example.eliceproject.dto;
 
-import com.example.eliceproject.entity.Board;
+import com.example.eliceproject.entity.Post;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @AllArgsConstructor
-public class PostDTO {
+public class CommentDTO {
 
     private Integer id;
-    private String title;
     private String content;
     private String writer;
-    private Integer viewcount;
     private LocalDateTime createdAt;
-    private Board board;
+    private Post post;
+
 }

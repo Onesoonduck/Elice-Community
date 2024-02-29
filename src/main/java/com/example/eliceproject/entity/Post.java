@@ -2,6 +2,7 @@ package com.example.eliceproject.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Post {
+public class Post{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,23 +31,35 @@ public class Post {
     private String writer;
 
     @Column(name = "viewcount", nullable = false, columnDefinition = "INT DEFAULT 0")
-    private int viewcount;
+    private Integer viewcount;
 
-    @Column(name = "createdAt", nullable = false)
-    private LocalDate createdAt;
-
-    public Post() {
-        this.createdAt = LocalDate.now();
-    }
+    @Column(name = "createdAt", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
     @ManyToOne
     @JoinColumn(name = "board_id")
     private Board board;
 
-    public void setBoard(Board board) {
+    public Post() {
+        this.createdAt = LocalDateTime.now();
+    }
+
+    public Post(String title, String content, String writer, Integer viewcount, LocalDateTime createdAt, Board board) {
+        this.title = title;
+        this.content = content;
+        this.writer = writer;
+        this.viewcount = viewcount;
+        this.createdAt = createdAt;
         this.board = board;
-        if (!this.board.getPosts().contains(this)) {
-            this.board.getPosts().add(this);
+    }
+
+    public void setBoard(Board board) {
+        if (board != null) {
+            this.board = board;
+            if (!this.board.getPosts().contains(this)) {
+                this.board.getPosts().add(this);
+            }
         }
     }
+
 }

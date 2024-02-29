@@ -10,5 +10,5 @@ public interface BoardMapper {
 
     @Mapping(target = "title", source = "title")
     @Mapping(target = "content", source = "content")
-    Board BoardDTOToBoard(BoardDTO boardDTO);
+    Board boardDTOToBoard(BoardDTO boardDTO);
 }
