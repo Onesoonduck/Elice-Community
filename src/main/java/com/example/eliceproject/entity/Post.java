@@ -1,5 +1,6 @@
 package com.example.eliceproject.entity;
 
+import com.example.eliceproject.EliceProjectApplication;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -33,6 +34,7 @@ public class Post{
     @Column(name = "viewcount", nullable = false, columnDefinition = "INT DEFAULT 0")
     private Integer viewcount;
 
+    @CreatedDate
     @Column(name = "createdAt", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 

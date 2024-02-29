@@ -31,6 +31,7 @@ public class PostService {
         Board boardToCreate = boardService.findBoardById(boardId);
         if (boardToCreate != null) {
             post.setBoard(boardToCreate);
+            post.setCreatedAt(LocalDateTime.now());
             return postRepository.save(post);
         } else {
             try {
@@ -41,11 +42,6 @@ public class PostService {
         }
     }
 
-    // 게시글 리스트 처리
-    public Page<Post> postList(Pageable pageable) {
-
-        return postRepository.findAll(pageable);
-    }
 
     // 게시글 수정
     public Post updatePost(Post post, Integer postId) {
@@ -60,17 +56,6 @@ public class PostService {
                 .ifPresent(writer -> foundPost.setWriter(writer));
 
         return postRepository.save(foundPost);
-    }
-
-    // 특정 게시글 불러오기
-    public Post postView(Integer postId) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("POST_NOT_FOUND"));
-
-        post.setViewcount(post.getViewcount() + 1);
-        postRepository.save(post);
-
-        return post;
     }
 
     // 게시판 키워드 검색
