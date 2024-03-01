@@ -3,11 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>게시판</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+
 </head>
 <style>
 
+
     .layout div {
-        margin-top: 70px;
+        margin-top: 30px;
         text-align: center;
         white-space: nowrap;
     }
@@ -27,20 +32,74 @@
         text-align: center;
     }
 
+    .underline {
+        height: 90px;
+        border-bottom: 1px solid lightgray;
+    }
+
     .header {
         display: flex;
-        width: 50%;
         margin: 0 auto;
         height: 40px;
-        border-collapse: collapse;
     }
 
     .header button {
         border: none;
         background-color: white;
         margin: 0 auto;
+        font-size: 35px;
+        color: #CAAED7;
+        font-family: "Black Han Sans", sans-serif;
+        font-weight: 400;
+        font-style: normal;
     }
 
+    .loginPage h2 {
+        color: #CAAED7;
+    }
+
+    .idarea {
+        display: inline-block;
+        vertical-align: top;
+        width: 300px;
+        height: 40px;
+        border: 1px solid #CAAED7;
+    }
+
+    .pwarea {
+        display: inline-block;
+        vertical-align: top;
+        width: 300px;
+        height: 40px;
+        margin-top: -31px;
+        border: 1px solid #CAAED7;
+    }
+
+    .loginbutton button {
+        display: inline-block;
+        vertical-align: top;
+        width: 310px;
+        height: 40px;
+        margin-top: -10px;
+        background-color: #CAAED7;
+        border-radius: 4px;
+        border: white solid 1px;
+        font-size: 20px;
+        color: white;
+    }
+
+    .pwbutton button {
+        display: inline-block;
+        vertical-align: top;
+        width: 310px;
+        height: 40px;
+        margin-top: -31px;
+        background-color: #CAAED7;
+        border-radius: 4px;
+        border: white solid 1px;
+        font-size: 20px;
+        color: white;
+    }
 
 </style>
 
@@ -49,18 +108,38 @@
 <div class="layout">
 
     <div>
-        <img src="../../static/logo.png" alt="로고">
+        <img class="logo" src="/logo.png" alt="로고">
         <h3>최고의 개발 문화가 깃든 공간</h3>
         <h3>엘리스Lab에서 함께 공부하고 성장해요</h3>
         <h3>"Classrooms For Everyone!"</h3>
     </div>
 
+    <div class="underline">
         <div class="header">
             <button>HOME</button>
             <button>공지사항</button>
             <button>예약</button>
             <button><a th:href="@{/boards}">커뮤니티</a></button>
         </div>
+    </div>
+
+    <div class="loginPage">
+        <h2>로그인</h2>
+        <form method="#">
+            <div class="idinput">
+                <input type="text" id="userId" name="userId" placeholder="아이디" class="idarea">
+            </div>
+            <div class="pwinput">
+                <input type="password" id="password" name="password" placeholder="비밀번호" class="pwarea">
+            </div>
+            <div class="loginbutton">
+                <button>로그인</button>
+            </div>
+            <div class="pwbutton">
+                <button>회원가입</button>
+            </div>
+        </form>
+    </div>
 
 </div>
 </body>
