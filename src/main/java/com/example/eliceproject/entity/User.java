@@ -1,13 +1,14 @@
 package com.example.eliceproject.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
+@Data
+@Builder(toBuilder = true)
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
 public class User {
 
@@ -23,6 +24,5 @@ public class User {
 
     @Column(name = "password", nullable = false)
     private String password;
-
 
 }

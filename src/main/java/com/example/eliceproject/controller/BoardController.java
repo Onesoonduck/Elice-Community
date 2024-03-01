@@ -37,13 +37,6 @@ public class BoardController {
         this.boardMapper = boardMapper;
     }
 
-    // 메인화면
-    @GetMapping("/main")
-    public String main (Model model) {
-
-        return "board/main";
-    }
-
     // 게시판
     @GetMapping
     public String getBoards (Model model) {

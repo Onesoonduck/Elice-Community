@@ -1,8 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>게시판</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+
 </head>
 <style>
 
@@ -45,12 +49,15 @@
         margin: 0 auto;
         font-size: 35px;
         color: #CAAED7;
+        font-family: "Black Han Sans", sans-serif;
+        font-weight: 400;
+        font-style: normal;
     }
 
     .signupPage {
         position: absolute;
         left: 50%;
-        top: 50%;
+        top: 65%;
         transform: translate(-50%, -50%);
         border-radius: 20px;
         margin: 0px;
@@ -90,6 +97,7 @@
         color: white;
         border-radius: 8px;
         border: white solid 1px;
+        font-size: 20px;
     }
 
 </style>
@@ -114,25 +122,43 @@
         </div>
     </div>
 
-    <div class="background">
-        <div class="signupPage">
-            <h2>회원가입을 위해<br>정보를 입력해주세요</h2>
-            <label for="email">* 아이디<br>
-                <input type="text" id="email"><br><br>
-            </label>
-            <label for="name">* 이름<br>
-                <input type="text" id="name"><br><br>
-            </label>
-            <label for="password1">* 비밀번호<br>
-                <input class="pw" id="password1" type="password"><br><br>
-            </label>
-            <label for="password2">* 비밀번호 확인<br>
-                <input class="pw" id="password2" type="password"><br><br> </label>
-                <div class="pwbutton">
-                    <button>가입하기</button>
-                </div>
+    <form th:action="@{/users/signup}" th:object="${userDTO}" method="post">
+        <div class="mb-3">
+            <label for="loginId" class="form-label">아이디</label>
+            <input type="text" id="loginId" th:field="*{loginId}" class="form-control">
+            <div th:if="${#fields.hasErrors('loginId')}" class="alert alert-danger">
+                <span th:each="error : ${#fields.errors('loginId')}" th:text="${error}"></span>
+            </div>
         </div>
-    </div>
+        <div class="mb-3">
+            <label for="username" class="form-label">이름</label>
+            <input type="text" id="username" th:field="*{username}" class="form-control">
+            <div th:if="${#fields.hasErrors('username')}" class="alert alert-danger">
+                <span th:each="error : ${#fields.errors('username')}" th:text="${error}"></span>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="password1" class="form-label">비밀번호</label>
+            <input type="password" id="password1" th:field="*{password1}" class="form-control">
+            <div th:if="${#fields.hasErrors('password1')}" class="alert alert-danger">
+                <span th:each="error : ${#fields.errors('password1')}" th:text="${error}"></span>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="password2" class="form-label">비밀번호 확인</label>
+            <input type="password" id="password2" th:field="*{password2}" class="form-control">
+            <div th:if="${#fields.hasErrors('password2')}" class="alert alert-danger">
+                <span th:each="error : ${#fields.errors('password2')}" th:text="${error}"></span>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">회원가입</button>
+    </form>
+
+
 </div>
+
+
+
 </body>
 </html>

@@ -86,6 +86,7 @@
         border: white solid 1px;
         font-size: 20px;
         color: white;
+        cursor: pointer;
     }
 
     .pwbutton button {
@@ -99,6 +100,7 @@
         border: white solid 1px;
         font-size: 20px;
         color: white;
+        cursor: pointer;
     }
 
 </style>
@@ -125,18 +127,18 @@
 
     <div class="loginPage">
         <h2>로그인</h2>
-        <form method="#">
+        <form method="get">
             <div class="idinput">
-                <input type="text" id="userId" name="userId" placeholder="아이디" class="idarea">
+                <input placeholder="아이디" class="idarea">
             </div>
             <div class="pwinput">
-                <input type="password" id="password" name="password" placeholder="비밀번호" class="pwarea">
+                <input placeholder="비밀번호" class="pwarea">
             </div>
             <div class="loginbutton">
                 <button>로그인</button>
             </div>
             <div class="pwbutton">
-                <button>회원가입</button>
+                <button><a th:href="@{/users/signup}">회원가입</a></button>
             </div>
         </form>
     </div>
