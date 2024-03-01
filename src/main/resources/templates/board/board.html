@@ -15,7 +15,38 @@
             font-family: "Elice DX Neolli", sans-serif;
         }
         .viewcount {
-            padding-left: 450px;
+            padding-left: 85%;
+        }
+
+        .link {
+            color: #CAAED7;
+        }
+
+        .btn {
+            background-color: #CAAED7;
+            border-color: white;
+        }
+
+        .board-item {
+            border-color: #CAAED7;
+        }
+
+        .page-link {
+            background-color: white !important;
+            color: #CAAED7 !important;
+            border-color: #CAAED7 !important;
+        }
+
+        .page-link:focus {
+            z-index: 3 !important;
+            background-color: #CAAED7 !important;
+            color: white !important;
+        }
+
+        .active>.page-link,.page-link.active {
+            z-index:3 !important;
+            background-color: #CAAED7 !important;
+            color: white !important;
         }
 
         .link {
@@ -66,8 +97,9 @@
            th:href="@{/posts/{postId}(postId=${post?.id})}">
             <h4 class="fw-bold mb-1" th:text="${post?.title}">게시판 제목</h4>
             <small class="writer" th:text="${post?.writer}">작성자</small>
-            <small class="text-secondary" th:text="${#temporals.format(post.createdAt, 'yyyy.MM.dd HH:mm')}">게시글 생성일</small>
-            <small class="viewcount" th:text="${post.viewcount}">조회수</small>
+            <small class="text-secondary" th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}">게시글 생성일</small>
+            <br>
+            <small class="viewcount" th:text="'조회수 ' + ${post.viewcount}">조회수</small>
         </a>
         <span th:if="${postPage?.isEmpty()}"
               class="text-center"

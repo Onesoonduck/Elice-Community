@@ -1,6 +1,5 @@
 package com.example.eliceproject.controller;
 
-import com.example.eliceproject.dto.BoardDTO;
 import com.example.eliceproject.entity.Board;
 import com.example.eliceproject.entity.Post;
 import com.example.eliceproject.mapper.BoardMapper;
@@ -112,7 +111,7 @@ public class BoardController {
 
         boardService.boardDelete(boardId);
 
-        return "redirect:/boards";
+        return "/board/boards";
     }
 
 }
