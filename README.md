@@ -85,9 +85,13 @@ API 계획
 
 ![image](https://github.com/user-attachments/assets/99005844-398f-47e4-ab93-7ee3f317b9d2)
 
+![스크린샷 2024-03-01 153431](https://github.com/user-attachments/assets/3fdcfb80-5d1b-4594-afd2-4ea62e454a6e)
 
+![스크린샷 2024-03-01 154008](https://github.com/user-attachments/assets/8e85270b-1c30-4096-9bed-67f2c2a9c0cf)
 
+![스크린샷 2024-03-01 154254](https://github.com/user-attachments/assets/bd91b772-14c7-4cec-aac5-7007e4605e81)
 
+![스크린샷 2024-03-01 154440](https://github.com/user-attachments/assets/0aac3403-e10f-4887-8975-b83c8cd424fd)
 
-![eilce_project_ERD](/uploads/6eb791b176c0c7e7ae957a8d567f47d0/eilce_project_ERD.png)
+![스크린샷 2024-03-01 154607](https://github.com/user-attachments/assets/ccb84b3c-6fe5-4f45-a215-ff75d29143ba)
 
