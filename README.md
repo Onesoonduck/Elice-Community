@@ -36,12 +36,6 @@ https://statuesque-smash-e48.notion.site/1-e854c37aa42e45d38b0f9cbc70a1c191?pvs=
 Master Branch (Reviewer) : 코치님 (매주 토요일)
 Develop Branch (Reviewer) : 개인 (매일)
 
-* 할 일
-1. 이슈, 마일스톤, Branch 작성
-2. API 구성 기획
-3. API 기능 구현
-4. Postman 테스트
-
 * 게시판
 1. 게시글의 집합소
 2. 게시글 정렬
@@ -87,7 +81,12 @@ Develop Branch (Reviewer) : 개인 (매일)
 
 
 API 계획
-![API](/uploads/c881fdfa1b9246a5236c06754c0c5e29/API.png)
+![image](https://github.com/user-attachments/assets/44645827-0aec-4868-a19b-88ec839e968a)
+
+![image](https://github.com/user-attachments/assets/99005844-398f-47e4-ab93-7ee3f317b9d2)
+
+
+
 
 
 ![eilce_project_ERD](/uploads/6eb791b176c0c7e7ae957a8d567f47d0/eilce_project_ERD.png)
